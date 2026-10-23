@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body {
+    @apply bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+  }
+
+  /* A phone tab bar is fixed to the bottom of the screen, so the page has to
+     scroll its last line clear of it. One rule here beats editing every <main>. */
+  @media (max-width: 639px) {
+    main {
+      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Touch targets are never smaller than a comfortable thumb. */
+  button,
+  a,
+  select,
+  input[type="range"] {
+    touch-action: manipulation;
+  }
+
+  input[type="range"] {
+    @apply h-11 accent-emerald-600;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-emerald-600;
+  }
+}
+
+@layer utilities {
+  /* Numbers that need to read from arm's length: tight, tabular, no wobble. */
+  .numeric {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+}
