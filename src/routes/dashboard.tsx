@@ -60,6 +60,26 @@ function Dashboard() {
 
   const saveNumbers = useServerFn(updateNumbersFn);
 
+  /**
+   * The estimate moves with real logged spending.
+   *
+   * Month-to-date pence from the Spending Tracker is scaled to a full month, and
+   * the larger of that rate and the number stored on the profile is used — so one
+   * coffee logged on the 1st can never flatter the estimated freedom date. With
+   * nothing logged, the profile number is used unchanged. Nothing is hardcoded.
+   */
+  const now = new Date();
+  const daysElapsed = Math.max(1, now.getDate());
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const monthSpentPence = data?.monthSpentPence ?? 0;
+  const spendCount = data?.spendCount ?? 0;
+  const rateFromLogs =
+    spendCount > 0 ? Math.round((monthSpentPence / daysElapsed) * daysInMonth) / 100 : 0;
+  const storedSpending = profile?.monthlySpending ?? 0;
+  const spending = rateFromLogs > 0 ? Math.max(rateFromLogs, storedSpending) : storedSpending;
+  const spendingBasis: "logs" | "profile" =
+    spendCount > 0 && rateFromLogs > storedSpending ? "logs" : "profile";
+
   const projection = useMemo(
     () =>
       project({
@@ -67,10 +87,10 @@ function Dashboard() {
         targetAge: profile?.targetFreedomAge ?? 45,
         currentSavings: profile?.currentSavings ?? 0,
         monthlyIncome: profile?.monthlyIncome ?? 0,
-        monthlySpending: profile?.monthlySpending ?? 0,
+        monthlySpending: spending,
         annualReturnPct: rate,
       }),
-    [profile, rate],
+    [profile, rate, spending],
   );
 
   if (!data || !profile) {
@@ -94,7 +114,7 @@ function Dashboard() {
   }
 
   const targetAge = profile.targetFreedomAge || 45;
-  const surplus = profile.monthlyIncome - profile.monthlySpending;
+  const surplus = profile.monthlyIncome - spending;
   const snapshots = data.snapshots;
   const first = snapshots[0];
   const change = first ? profile.currentSavings - first.savings : 0;
@@ -109,13 +129,13 @@ function Dashboard() {
   function paceNote(): string {
     if (projection.fiAge !== null && projection.fiAge <= currentAge + 0.05) {
       return `You're already at the ${money(projection.fiNumber, currency)} that would cover ${money(
-        profile.monthlySpending,
+        spending,
         currency,
       )} a month — on these assumptions the target is met today.`;
     }
     if (projection.fiAge === null) {
       if (surplus > 0) {
-        return `At ${money(profile.monthlySpending, currency)} of spending a month against ${money(
+        return `At ${money(spending, currency)} of spending a month against ${money(
           profile.monthlyIncome,
           currency,
         )} coming in, ${money(surplus, currency)} a month is left over — but on this pace the balance is about ${money(
@@ -127,12 +147,12 @@ function Dashboard() {
         )} target, and doesn't reach it inside this illustration's window.`;
       }
       if (surplus === 0) {
-        return `At ${money(profile.monthlySpending, currency)} of spending a month against ${money(
+        return `At ${money(spending, currency)} of spending a month against ${money(
           profile.monthlyIncome,
           currency,
         )} coming in, nothing is left over to build up — so on this pace the balance never reaches the target.`;
       }
-      return `Your spending (${money(profile.monthlySpending, currency)} a month) is more than what comes in (${money(
+      return `Your spending (${money(spending, currency)} a month) is more than what comes in (${money(
         profile.monthlyIncome,
         currency,
       )}), so money has to come out of savings each month — on this pace the balance never reaches the target.`;
@@ -317,7 +337,7 @@ function Dashboard() {
             <>
               <dl className="mt-2 divide-y divide-slate-100 text-sm dark:divide-white/10">
                 <Row label="Money in each month" value={money(profile.monthlyIncome, currency)} />
-                <Row label="Money out each month" value={money(profile.monthlySpending, currency)} />
+                <Row label="Money out each month" value={money(spending, currency)} />
                 <Row label="Saved so far" value={money(profile.currentSavings, currency)} />
                 <Row label="Target age" value={String(targetAge)} />
               </dl>
@@ -325,6 +345,20 @@ function Dashboard() {
                 Change anything here when your pay, rent or savings move — each save adds a check-in to
                 the trend below.
               </p>
+              {spendCount > 0 ? (
+                <p className="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  Your estimated date uses{" "}
+                  <strong className="text-slate-700 dark:text-slate-200">{money(spending, currency)}</strong>{" "}
+                  a month of spending —{" "}
+                  {spendingBasis === "logs"
+                    ? `the rate your ${spendCount} logged ${spendCount === 1 ? "spend" : "spends"} this month point to`
+                    : "the number on your profile, which is higher than your logged rate"}{" "}
+                  — so logging spends moves the date.{" "}
+                  <Link to="/spending" className="font-semibold text-emerald-700 underline dark:text-emerald-400">
+                    Log a spend
+                  </Link>
+                </p>
+              ) : null}
             </>
           )}
         </Card>
@@ -385,10 +419,10 @@ function Dashboard() {
             </li>
             <li>
               • Freedom means <strong>25 × your yearly spending</strong> ({money(projection.fiNumber, currency)}),
-              the balance where drawing 4% a year covers {money(profile.monthlySpending, currency)} a month.
+              the balance where drawing 4% a year covers {money(spending, currency)} a month.
             </li>
             <li>
-              • Your spending stays at {money(profile.monthlySpending, currency)} a month and your income at{" "}
+              • Your spending stays at {money(spending, currency)} a month and your income at{" "}
               {money(profile.monthlyIncome, currency)} — no pay rises, no inflation, no big purchases.
             </li>
             <li>

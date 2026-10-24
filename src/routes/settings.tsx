@@ -14,7 +14,7 @@ export const Route = createFileRoute("/settings")({
       dbConnected: false,
     }));
     if (!user) throw redirect({ to: "/login" });
-    return { signedIn: true, dbConnected };
+    return { signedIn: true, dbConnected, email: user.email };
   },
   component: Settings,
 });
@@ -29,7 +29,7 @@ const LEGAL_COPY: Record<string, string> = {
 
 function Settings() {
   const navigate = useNavigate();
-  const { signedIn } = Route.useRouteContext();
+  const { signedIn, email } = Route.useRouteContext();
   const logout = useServerFn(logoutFn);
   const deleteAccount = useServerFn(deleteAccountFn);
   const [confirming, setConfirming] = useState(false);
@@ -99,6 +99,9 @@ function Settings() {
 
         <Card>
           <h2 className="text-base font-semibold text-slate-900 dark:text-white">Account</h2>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            Signed in as <span className="font-semibold break-all text-slate-900 dark:text-white">{email}</span>
+          </p>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Signing out keeps your plan; you can log back in whenever you like.
           </p>

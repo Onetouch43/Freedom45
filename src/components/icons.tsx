@@ -230,6 +230,8 @@ export const ICONS = {
   dashboard: IconGauge,
   hustles: IconBolt,
   spending: IconWallet,
+  family: IconUser,
+  investments: IconTrendUp,
   library: IconBook,
   settings: IconSettings,
 } as const;

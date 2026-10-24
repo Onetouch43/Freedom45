@@ -10,13 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SpendingRouteImport } from './routes/spending'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SideHustlesRouteImport } from './routes/side-hustles'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InvestmentsRouteImport } from './routes/investments'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as FamilyRouteImport } from './routes/family'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AboutRouteImport } from './routes/about'
@@ -26,6 +29,11 @@ import { Route as ApiMigrateRouteImport } from './routes/api/migrate'
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpendingRoute = SpendingRouteImport.update({
+  id: '/spending',
+  path: '/spending',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -58,9 +66,19 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvestmentsRoute = InvestmentsRouteImport.update({
+  id: '/investments',
+  path: '/investments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamilyRoute = FamilyRouteImport.update({
+  id: '/family',
+  path: '/family',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DisclaimerRoute = DisclaimerRouteImport.update({
@@ -94,13 +112,16 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/family': typeof FamilyRoute
   '/guide': typeof GuideRoute
+  '/investments': typeof InvestmentsRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
+  '/spending': typeof SpendingRoute
   '/terms': typeof TermsRoute
   '/api/migrate': typeof ApiMigrateRoute
 }
@@ -109,13 +130,16 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/family': typeof FamilyRoute
   '/guide': typeof GuideRoute
+  '/investments': typeof InvestmentsRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
+  '/spending': typeof SpendingRoute
   '/terms': typeof TermsRoute
   '/api/migrate': typeof ApiMigrateRoute
 }
@@ -125,13 +149,16 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/family': typeof FamilyRoute
   '/guide': typeof GuideRoute
+  '/investments': typeof InvestmentsRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
+  '/spending': typeof SpendingRoute
   '/terms': typeof TermsRoute
   '/api/migrate': typeof ApiMigrateRoute
 }
@@ -142,13 +169,16 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/disclaimer'
+    | '/family'
     | '/guide'
+    | '/investments'
     | '/login'
     | '/onboarding'
     | '/privacy'
     | '/settings'
     | '/side-hustles'
     | '/signup'
+    | '/spending'
     | '/terms'
     | '/api/migrate'
   fileRoutesByTo: FileRoutesByTo
@@ -157,13 +187,16 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/disclaimer'
+    | '/family'
     | '/guide'
+    | '/investments'
     | '/login'
     | '/onboarding'
     | '/privacy'
     | '/settings'
     | '/side-hustles'
     | '/signup'
+    | '/spending'
     | '/terms'
     | '/api/migrate'
   id:
@@ -172,13 +205,16 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/disclaimer'
+    | '/family'
     | '/guide'
+    | '/investments'
     | '/login'
     | '/onboarding'
     | '/privacy'
     | '/settings'
     | '/side-hustles'
     | '/signup'
+    | '/spending'
     | '/terms'
     | '/api/migrate'
   fileRoutesById: FileRoutesById
@@ -188,13 +224,16 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DashboardRoute: typeof DashboardRoute
   DisclaimerRoute: typeof DisclaimerRoute
+  FamilyRoute: typeof FamilyRoute
   GuideRoute: typeof GuideRoute
+  InvestmentsRoute: typeof InvestmentsRoute
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
   PrivacyRoute: typeof PrivacyRoute
   SettingsRoute: typeof SettingsRoute
   SideHustlesRoute: typeof SideHustlesRoute
   SignupRoute: typeof SignupRoute
+  SpendingRoute: typeof SpendingRoute
   TermsRoute: typeof TermsRoute
   ApiMigrateRoute: typeof ApiMigrateRoute
 }
@@ -206,6 +245,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spending': {
+      id: '/spending'
+      path: '/spending'
+      fullPath: '/spending'
+      preLoaderRoute: typeof SpendingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -250,11 +296,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/investments': {
+      id: '/investments'
+      path: '/investments'
+      fullPath: '/investments'
+      preLoaderRoute: typeof InvestmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guide': {
       id: '/guide'
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/family': {
+      id: '/family'
+      path: '/family'
+      fullPath: '/family'
+      preLoaderRoute: typeof FamilyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/disclaimer': {
@@ -300,13 +360,16 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DashboardRoute: DashboardRoute,
   DisclaimerRoute: DisclaimerRoute,
+  FamilyRoute: FamilyRoute,
   GuideRoute: GuideRoute,
+  InvestmentsRoute: InvestmentsRoute,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
   PrivacyRoute: PrivacyRoute,
   SettingsRoute: SettingsRoute,
   SideHustlesRoute: SideHustlesRoute,
   SignupRoute: SignupRoute,
+  SpendingRoute: SpendingRoute,
   TermsRoute: TermsRoute,
   ApiMigrateRoute: ApiMigrateRoute,
 }
