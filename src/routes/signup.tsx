@@ -46,13 +46,13 @@ function Signup() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header />
       <main className="mx-auto max-w-md px-4 py-8">
-        <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-black tracking-tight text-body">
           Create your account
         </h1>
-        <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
+        <p className="mt-1.5 text-sm text-muted">
           Email and password — that&apos;s it. You&apos;ll be on your Path to 45 in about a minute.
         </p>
 
@@ -68,7 +68,7 @@ function Signup() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white"
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
                 placeholder="you@example.com"
               />
             </div>
@@ -82,7 +82,7 @@ function Signup() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white"
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
                 placeholder="at least 8 characters"
               />
             </div>
@@ -93,13 +93,13 @@ function Signup() {
           </form>
         </Card>
 
-        <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
+        <p className="mt-4 text-center text-sm text-muted">
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold text-emerald-700 dark:text-emerald-400">
+          <Link to="/login" className="font-semibold text-accent">
             Log in
           </Link>
         </p>
-        <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
+        <p className="mt-6 text-center text-xs text-muted">
           Your details stay yours. Freedom45 gives general information about money — not financial
           advice.
         </p>

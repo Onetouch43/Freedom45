@@ -17,20 +17,20 @@ export const Route = createFileRoute("/investments")({
  */
 function InvestmentsPage() {
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header />
       <main className="mx-auto max-w-2xl space-y-3.5 px-4 py-5 pb-24 sm:space-y-4 sm:py-6">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-black tracking-tight text-body">
             Investments
           </h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+          <p className="mt-1 text-sm text-muted">
             The investment library isn&apos;t built yet. This page explains what is coming — it does not
             recommend anything.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-3.5 text-amber-900 dark:border-amber-400/40 dark:bg-amber-400/15 dark:text-amber-100">
+        <div className="rounded-2xl border border-warn/40 bg-warn-fill/12 p-3.5 text-warn">
           <p className="flex items-center gap-2 text-base font-bold">
             <ICONS.investments size={18} />
             Coming soon
@@ -42,8 +42,8 @@ function InvestmentsPage() {
         </div>
 
         <Card>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white">What will live here</h2>
-          <ul className="mt-2 space-y-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <h2 className="text-sm font-bold text-body">What will live here</h2>
+          <ul className="mt-2 space-y-2 text-sm leading-relaxed text-muted">
             <li>
               • <strong>UK wrappers explained</strong> — Individual Savings Accounts, workplace pensions
               and personal pensions, in plain English, with the current rules sourced and dated.
@@ -68,15 +68,15 @@ function InvestmentsPage() {
         </Card>
 
         <Card>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white">What it will never do</h2>
-          <ul className="mt-2 space-y-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <h2 className="text-sm font-bold text-body">What it will never do</h2>
+          <ul className="mt-2 space-y-2 text-sm leading-relaxed text-muted">
             <li>• Name a fund or platform as the one to choose.</li>
             <li>• Predict what markets will do.</li>
             <li>• Replace regulated advice about your own circumstances.</li>
           </ul>
           <Link
             to="/guide"
-            className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-slate-100 px-3.5 text-sm font-semibold text-slate-800 dark:bg-white/10 dark:text-white"
+            className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-surface-2 px-3.5 text-sm font-semibold text-body"
           >
             Read the user guide
             <IconArrowRight size={16} />

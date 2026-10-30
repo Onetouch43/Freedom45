@@ -66,29 +66,29 @@ function Settings() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header signedIn={signedIn} />
       <main className="mx-auto max-w-2xl space-y-4 px-4 py-6">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Settings</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-body">Settings</h1>
 
         <Card>
-          <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+          <h2 className="text-base font-semibold text-body">
             Legal and information
           </h2>
-          <ul className="mt-2 divide-y divide-slate-200 dark:divide-white/10">
+          <ul className="mt-2 divide-y divide-line">
             {LEGAL_LINKS.map((item) => (
               <li key={item.to}>
                 <Link
                   to={item.to}
-                  className="flex min-h-14 items-center justify-between gap-3 py-2 text-slate-800 dark:text-slate-100"
+                  className="flex min-h-14 items-center justify-between gap-3 py-2 text-body"
                 >
                   <span>
                     <span className="block text-[15px] font-semibold">{item.label}</span>
-                    <span className="block text-xs text-slate-500 dark:text-slate-400">
+                    <span className="block text-xs text-muted">
                       {LEGAL_COPY[item.to]}
                     </span>
                   </span>
-                  <span aria-hidden className="text-slate-400">
+                  <span aria-hidden className="text-faint">
                     →
                   </span>
                 </Link>
@@ -98,11 +98,11 @@ function Settings() {
         </Card>
 
         <Card>
-          <h2 className="text-base font-semibold text-slate-900 dark:text-white">Account</h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Signed in as <span className="font-semibold break-all text-slate-900 dark:text-white">{email}</span>
+          <h2 className="text-base font-semibold text-body">Account</h2>
+          <p className="mt-1 text-sm text-muted">
+            Signed in as <span className="font-semibold break-all text-body">{email}</span>
           </p>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+          <p className="mt-1 text-sm text-muted">
             Signing out keeps your plan; you can log back in whenever you like.
           </p>
           <Button type="button" variant="light" onClick={() => void signOut()} className="mt-3 w-full" disabled={busy}>
@@ -110,9 +110,9 @@ function Settings() {
           </Button>
         </Card>
 
-        <Card className="border-rose-200 dark:border-rose-400/30">
-          <h2 className="text-base font-semibold text-rose-900 dark:text-rose-200">Delete my data</h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+        <Card className="border-danger/35">
+          <h2 className="text-base font-semibold text-danger">Delete my data</h2>
+          <p className="mt-1 text-sm text-muted">
             Deletes your account and everything in it: your email and password hash, your profile,
             your saved side hustles, your spending entries and every snapshot. <strong>This is permanent
             and cannot be undone.</strong> No email is needed.
@@ -122,7 +122,7 @@ function Settings() {
 
           {confirming ? (
             <div className="mt-3 space-y-2">
-              <p className="rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-900 dark:bg-rose-500/10 dark:text-rose-100">
+              <p className="rounded-xl bg-danger-fill/14 p-3 text-sm font-medium text-danger">
                 Delete everything now? Your plan will be gone immediately and we cannot restore it.
               </p>
               <div className="flex flex-col gap-2 sm:flex-row">
@@ -130,7 +130,7 @@ function Settings() {
                   type="button"
                   disabled={busy}
                   onClick={() => void deleteEverything()}
-                  className="flex-1 !bg-rose-600 hover:!bg-rose-500"
+                  className="flex-1 !bg-danger-fill hover:!bg-danger-fill"
                 >
                   {busy ? "Deleting…" : "Yes, delete everything"}
                 </Button>
@@ -150,7 +150,7 @@ function Settings() {
               type="button"
               variant="light"
               onClick={() => setConfirming(true)}
-              className="mt-3 w-full !text-rose-700 dark:!text-rose-200"
+              className="mt-3 w-full !text-danger"
             >
               Delete my data
             </Button>

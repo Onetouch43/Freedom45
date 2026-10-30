@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 export function Disclaimer({ className = "", compact = false }: { className?: string; compact?: boolean }) {
   return (
     <aside
-      className={`rounded-xl border border-amber-300/70 bg-amber-50 p-3 text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-100 ${className}`}
+      className={`rounded-xl border border-warn/40 bg-warn-fill/12 p-3 text-warn ${className}`}
     >
       <p className="text-[11px] leading-relaxed sm:text-xs">
         <span className="font-semibold">Information only — not financial advice. </span>
@@ -30,7 +30,7 @@ export function Card({
 }) {
   return (
     <Tag
-      className={`rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 dark:border-white/10 dark:bg-white/5 ${className}`}
+      className={`rounded-card border border-line bg-surface p-4 sm:p-5 ${className}`}
     >
       {children}
     </Tag>
@@ -39,7 +39,7 @@ export function Card({
 
 export function Label({ children, htmlFor }: { children: ReactNode; htmlFor?: string }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-body">
       {children}
     </label>
   );
@@ -53,10 +53,10 @@ export function Button({
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "light" }) {
   const styles = {
     primary:
-      "bg-emerald-600 text-white hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 shadow-sm",
+      "bg-accent-fill text-on-accent hover:bg-accent-fill-hover active:bg-accent-fill-hover disabled:opacity-50",
     light:
-      "bg-slate-100 text-slate-800 hover:bg-slate-200 disabled:opacity-50 dark:bg-white/10 dark:text-white dark:hover:bg-white/20",
-    ghost: "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white",
+      "border border-line bg-surface-2 text-body hover:border-line-strong hover:bg-surface disabled:opacity-50",
+    ghost: "text-muted hover:text-body",
   }[variant];
   return (
     <button
@@ -73,7 +73,7 @@ export function ErrorNote({ children }: { children: ReactNode }) {
   return (
     <p
       role="alert"
-      className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-sm text-rose-800 dark:border-rose-400/30 dark:bg-rose-500/10 dark:text-rose-200"
+      className="rounded-xl border border-danger/40 bg-danger-fill/14 p-3 text-sm text-danger"
     >
       {children}
     </p>

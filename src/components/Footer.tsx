@@ -23,22 +23,22 @@ export function Footer({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <footer
       className={`mx-auto mt-8 max-w-3xl px-4 ${
-        signedIn ? "pb-[calc(5rem+env(safe-area-inset-bottom))] sm:pb-10" : "pb-10"
+        signedIn ? "pb-[calc(7.5rem+env(safe-area-inset-bottom))] sm:pb-10" : "pb-10"
       }`}
     >
-      <div className="border-t border-slate-200 pt-5 dark:border-white/10">
+      <div className="border-t border-line pt-5">
         <nav aria-label="Legal and information" className="flex flex-wrap gap-x-4 gap-y-2">
           {LEGAL_LINKS.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="inline-flex min-h-9 items-center text-sm font-medium text-slate-600 underline-offset-4 hover:text-slate-900 hover:underline dark:text-slate-300 dark:hover:text-white"
+              className="inline-flex min-h-9 items-center text-sm font-medium text-muted underline-offset-4 hover:text-body hover:underline"
             >
               {item.label}
             </Link>
           ))}
         </nav>
-        <p className="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+        <p className="mt-3 text-xs leading-relaxed text-muted">
           Freedom45 provides educational estimates only. Not financial, investment, or tax advice.
           See our{" "}
           <Link to="/disclaimer" className="underline underline-offset-2">
@@ -46,11 +46,11 @@ export function Footer({ signedIn = false }: { signedIn?: boolean }) {
           </Link>
           .
         </p>
-        <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+        <p className="mt-2 text-xs leading-relaxed text-faint">
           Company details are placeholders until the business is registered: legal name, company
           number and registered address all read as marked placeholders below. Built for the UK.
         </p>
-        <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+        <p className="mt-2 text-xs text-faint">
           © {new Date().getFullYear()} Freedom45 · Prices in pounds sterling.
         </p>
       </div>
@@ -74,13 +74,13 @@ export function LegalPage({
   signedIn?: boolean;
 }) {
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <div className="mx-auto max-w-2xl px-4 pt-6">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        <h1 className="text-2xl font-bold tracking-tight text-body sm:text-3xl">
           {title}
         </h1>
         {intro ? (
-          <div className="mt-3 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
+          <div className="mt-3 text-[15px] leading-relaxed text-body">
             {intro}
           </div>
         ) : null}
@@ -95,8 +95,8 @@ export function LegalPage({
 export function Section({ heading, children }: { heading: string; children: ReactNode }) {
   return (
     <section>
-      <h2 className="text-base font-semibold text-slate-900 sm:text-lg dark:text-white">{heading}</h2>
-      <div className="mt-2 space-y-2 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">
+      <h2 className="text-base font-semibold text-body sm:text-lg">{heading}</h2>
+      <div className="mt-2 space-y-2 text-[15px] leading-relaxed text-body">
         {children}
       </div>
     </section>
@@ -106,7 +106,7 @@ export function Section({ heading, children }: { heading: string; children: Reac
 /** A bulleted list that reads cleanly on a phone. */
 export function Bullets({ items }: { items: ReactNode[] }) {
   return (
-    <ul className="ml-4 list-disc space-y-1.5 marker:text-slate-400">
+    <ul className="ml-4 list-disc space-y-1.5 marker:text-faint">
       {items.map((item, index) => (
         <li key={index}>{item}</li>
       ))}
@@ -121,7 +121,7 @@ export function Bullets({ items }: { items: ReactNode[] }) {
  */
 export function Placeholder({ children }: { children: ReactNode }) {
   return (
-    <mark className="rounded bg-amber-200 px-1 font-semibold text-amber-950 dark:bg-amber-400/30 dark:text-amber-100">
+    <mark className="rounded bg-warn-fill/25 px-1 font-semibold text-warn">
       [{children}]
     </mark>
   );
