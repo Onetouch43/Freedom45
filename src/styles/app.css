@@ -1,16 +1,87 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════════════════════════════════════
+   Freedom45 palette — emerald dark theme ("option A").
+
+   Defined ONCE here, as Tailwind v4 theme tokens, and used everywhere as
+   utilities (bg-page, text-muted, border-line, text-accent, bg-accent-fill…).
+   No hex values belong in components, and no light-mode Tailwind colour
+   classes (bg-white, text-slate-900, border-slate-200 …) belong in components.
+
+   Contrast measured against --color-page (#0E1116), WCAG AA needs 4.5:1:
+     body 16.5:1 · muted 8.8:1 · faint 6.2:1 · accent 10.6:1
+     danger 9.4:1 · warn 13.9:1 · on-accent on accent-fill 6.3:1
+   ══════════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* Surfaces: near-black page, each card one step lighter, thin borders. */
+  --color-page: #0e1116;
+  --color-surface: #151a21;
+  --color-surface-2: #1b222b;
+  --color-line: #262e38;
+  --color-line-strong: #3a4753;
+
+  /* Text: warm off-white body, two steps of muted grey for secondary lines. */
+  --color-body: #f2efe9;
+  --color-muted: #a9b2bd;
+  --color-faint: #8b949f;
+
+  /* The one accent. Bright emerald for text/icons, deeper emerald for fills. */
+  --color-accent: #45d9a4;
+  --color-accent-soft: #6ee7b7;
+  --color-accent-fill: #0fa97c;
+  --color-accent-fill-hover: #12be8b;
+  --color-on-accent: #05130e;
+
+  /* Alerts, re-tinted for dark so both spending banners stay unmistakable. */
+  --color-danger: #ff9b9b;
+  --color-danger-fill: #e5484d;
+  --color-warn: #ffd79a;
+  --color-warn-fill: #f5a524;
+
+  --radius-card: 16px;
+}
+
 @layer base {
+  /* One theme, no OS light mode. Also makes native controls (date picker,
+     select dropdowns, scrollbars) render dark instead of white. */
+  :root {
+    color-scheme: dark;
+  }
+
   html,
   body {
-    @apply bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+    @apply bg-page text-body antialiased;
+  }
+
+  /* Form controls start dark everywhere; components may still add utilities. */
+  input,
+  select,
+  textarea {
+    @apply border-line-strong bg-surface-2 text-body;
+    color-scheme: dark;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-faint;
+  }
+
+  /* Disabled controls are visibly inert, not a lighter theme. */
+  :disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  /* List/table dividers default to the border token. */
+  hr {
+    @apply border-line;
   }
 
   /* A phone tab bar is fixed to the bottom of the screen, so the page has to
-     scroll its last line clear of it. One rule here beats editing every <main>. */
+     scroll its last line clear of it. One rule here beats editing every <main>.
+     7.5rem clears the nav (56px) + its 24px lift off the bottom + a gap. */
   @media (max-width: 639px) {
     main {
-      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+      padding-bottom: calc(8.5rem + env(safe-area-inset-bottom));
     }
   }
 
@@ -23,11 +94,11 @@
   }
 
   input[type="range"] {
-    @apply h-11 accent-emerald-600;
+    @apply h-11 accent-accent-fill;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-emerald-600;
+    @apply outline-2 outline-offset-2 outline-accent;
   }
 }
 
