@@ -58,6 +58,10 @@ export type DashboardData = {
   onboarded: boolean;
   profile: ProfileData | null;
   snapshots: SnapshotData[];
+  /** Everything logged in the Spending Tracker so far this calendar month, in pence. */
+  monthSpentPence: number;
+  /** How many spending_logs rows the user has in total (0 means "nothing logged yet"). */
+  spendCount: number;
 };
 
 export type MutationResult = { ok: true } | { ok: false; reason: string; message: string };
@@ -251,23 +255,58 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
   const dbConnected = isDbConfigured();
   const user = await requireUser();
   if (!user) {
-    return { dbConnected, signedIn: false, onboarded: false, profile: null, snapshots: [] };
+    return {
+      dbConnected,
+      signedIn: false,
+      onboarded: false,
+      profile: null,
+      snapshots: [],
+      monthSpentPence: 0,
+      spendCount: 0,
+    };
   }
   try {
     await ensureSchema();
     const profile = await loadProfile(user.id);
     const snapshots = await loadSnapshots(user.id);
+    const totals = await loadSpendTotals(user.id);
     return {
       dbConnected,
       signedIn: true,
       onboarded: Boolean(profile?.onboardedAt),
       profile,
       snapshots,
+      monthSpentPence: totals.monthSpentPence,
+      spendCount: totals.spendCount,
     };
   } catch {
-    return { dbConnected, signedIn: true, onboarded: false, profile: null, snapshots: [] };
+    return {
+      dbConnected,
+      signedIn: true,
+      onboarded: false,
+      profile: null,
+      snapshots: [],
+      monthSpentPence: 0,
+      spendCount: 0,
+    };
   }
 });
+
+/** Month-to-date spend (pence) and the user's total number of logged spends. */
+async function loadSpendTotals(
+  userId: number,
+): Promise<{ monthSpentPence: number; spendCount: number }> {
+  const rows = await query<Record<string, unknown>>(
+    `select coalesce(sum(amount_pence) filter (
+              where spent_at >= date_trunc('month', current_date)::date and spent_at <= current_date
+            ), 0) as month_pence,
+            count(*) as n
+       from spending_logs where user_id = $1`,
+    [userId],
+  );
+  const row = rows[0] ?? {};
+  return { monthSpentPence: Math.round(num(row.month_pence)), spendCount: num(row.n) };
+}
 
 export const saveOnboardingFn = createServerFn({ method: "POST" }).handler(
   async ({ data }: { data: OnboardingInput }): Promise<MutationResult> => {
@@ -459,6 +498,7 @@ export const deleteAccountFn = createServerFn({ method: "POST" }).handler(
         `with s as (delete from snapshots where user_id = $1),
               h as (delete from side_hustle_selections where user_id = $1),
               e as (delete from spending_entries where user_id = $1),
+              l as (delete from spending_logs where user_id = $1),
               p as (delete from profiles where user_id = $1),
               x as (delete from sessions where user_id = $1)
          delete from users where id = $1`,

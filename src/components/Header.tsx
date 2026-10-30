@@ -17,16 +17,19 @@ import { logoutFn } from "~/server/actions";
  * The legal pages live in the footer only, so the tab bar stays uncluttered.
  */
 type Destination = {
-  to: "/dashboard" | "/side-hustles" | "/settings";
+  to: "/dashboard" | "/side-hustles" | "/spending" | "/family" | "/investments";
   label: string;
   shortLabel: string;
   icon: IconKey;
 };
 
+/** The five thumb-reachable tabs. Settings stays a small icon in the header. */
 export const NAV_DESTINATIONS: Destination[] = [
-  { to: "/dashboard", label: "Path to 45", shortLabel: "Dashboard", icon: "dashboard" },
-  { to: "/side-hustles", label: "Side hustles", shortLabel: "Hustles", icon: "hustles" },
-  { to: "/settings", label: "Settings", shortLabel: "Settings", icon: "settings" },
+  { to: "/dashboard", label: "Dashboard", shortLabel: "Dashboard", icon: "dashboard" },
+  { to: "/side-hustles", label: "Hustles", shortLabel: "Hustles", icon: "hustles" },
+  { to: "/spending", label: "Spending", shortLabel: "Spending", icon: "spending" },
+  { to: "/family", label: "Family", shortLabel: "Family", icon: "family" },
+  { to: "/investments", label: "Investments", shortLabel: "Invest", icon: "investments" },
 ];
 
 export function Header({ signedIn = false }: { signedIn?: boolean }) {
@@ -66,6 +69,14 @@ export function Header({ signedIn = false }: { signedIn?: boolean }) {
                 );
               })}
             </nav>
+            <Link
+              to="/settings"
+              aria-label="Settings"
+              className="grid min-h-11 min-w-11 place-items-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
+              activeProps={{ className: "!text-emerald-700 dark:!text-emerald-400" }}
+            >
+              <ICONS.settings size={20} />
+            </Link>
             <LogoutButton />
           </div>
         ) : (
@@ -115,13 +126,13 @@ export function BottomNav() {
             <li key={item.to} className="flex-1">
               <Link
                 to={item.to}
-                className="group flex min-h-14 flex-col items-center justify-center gap-1 py-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                className="group flex min-h-14 w-full flex-col items-center justify-center gap-0.5 px-0.5 py-2 text-[10px] leading-tight font-semibold text-slate-500 dark:text-slate-400"
                 activeProps={{ className: "!text-emerald-700 dark:!text-emerald-400" }}
               >
                 {({ isActive }) => (
                   <>
                     <span
-                      className={`grid h-8 w-12 place-items-center rounded-full transition-colors ${
+                      className={`grid h-8 w-11 place-items-center rounded-full transition-colors ${
                         isActive
                           ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-400/20 dark:text-emerald-300"
                           : "text-slate-500 group-hover:bg-slate-100 dark:text-slate-400 dark:group-hover:bg-white/10"
@@ -129,7 +140,7 @@ export function BottomNav() {
                     >
                       <Icon size={22} strokeWidth={isActive ? 2 : 1.75} />
                     </span>
-                    <span>{item.shortLabel}</span>
+                    <span className="max-w-full truncate">{item.shortLabel}</span>
                   </>
                 )}
               </Link>

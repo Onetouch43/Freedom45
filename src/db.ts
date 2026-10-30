@@ -172,6 +172,7 @@ export const TABLES = [
   "profiles",
   "sessions",
   "spending_entries",
+  "spending_logs",
   "side_hustle_selections",
   "snapshots",
 ] as const;
@@ -229,6 +230,22 @@ export const DDL: string[] = [
      created_at timestamptz not null default now()
    )`,
   `create index if not exists spending_entries_user_spent_idx on spending_entries (user_id, spent_at desc)`,
+  // The Spending Tracker. Money is stored as INTEGER PENCE — never a float — so a
+  // pound amount can never drift by a rounding error. `spent_at` is a plain date
+  // (the day the money went out, as the user remembers it); `created_at` is when
+  // the row was typed in, which is what the "3 in 24 hours" habit alert counts.
+  `create table if not exists spending_logs (
+     id serial primary key,
+     user_id integer not null references users(id) on delete cascade,
+     amount_pence integer not null check (amount_pence > 0),
+     category text not null check (category in ('Housing','Food','Transport','Fun','Family','Investments','Other')),
+     payment_method text not null check (payment_method in ('cash','card')),
+     note text,
+     spent_at date not null,
+     created_at timestamptz not null default now()
+   )`,
+  `create index if not exists spending_logs_user_spent_idx on spending_logs (user_id, spent_at desc, id desc)`,
+  `create index if not exists spending_logs_user_created_idx on spending_logs (user_id, created_at desc)`,
 
   `create table if not exists side_hustle_selections (
      id serial primary key,
