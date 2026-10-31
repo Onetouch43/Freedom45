@@ -12,6 +12,7 @@ import type { ReactNode } from "react";
  * safe-area inset). The footer therefore sits ABOVE the nav, never over it.
  */
 export const LEGAL_LINKS = [
+  { to: "/legal", label: "Legal" },
   { to: "/disclaimer", label: "Disclaimers" },
   { to: "/privacy", label: "Privacy" },
   { to: "/terms", label: "Terms" },

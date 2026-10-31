@@ -17,6 +17,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LegalRouteImport } from './routes/legal'
 import { Route as InvestmentsRouteImport } from './routes/investments'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as FamilyRouteImport } from './routes/family'
@@ -64,6 +65,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestmentsRoute = InvestmentsRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/family': typeof FamilyRoute
   '/guide': typeof GuideRoute
   '/investments': typeof InvestmentsRoute
+  '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/family': typeof FamilyRoute
   '/guide': typeof GuideRoute
   '/investments': typeof InvestmentsRoute
+  '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/family': typeof FamilyRoute
   '/guide': typeof GuideRoute
   '/investments': typeof InvestmentsRoute
+  '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/family'
     | '/guide'
     | '/investments'
+    | '/legal'
     | '/login'
     | '/onboarding'
     | '/privacy'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/family'
     | '/guide'
     | '/investments'
+    | '/legal'
     | '/login'
     | '/onboarding'
     | '/privacy'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/family'
     | '/guide'
     | '/investments'
+    | '/legal'
     | '/login'
     | '/onboarding'
     | '/privacy'
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   FamilyRoute: typeof FamilyRoute
   GuideRoute: typeof GuideRoute
   InvestmentsRoute: typeof InvestmentsRoute
+  LegalRoute: typeof LegalRoute
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/investments': {
       id: '/investments'
       path: '/investments'
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   FamilyRoute: FamilyRoute,
   GuideRoute: GuideRoute,
   InvestmentsRoute: InvestmentsRoute,
+  LegalRoute: LegalRoute,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
   PrivacyRoute: PrivacyRoute,
