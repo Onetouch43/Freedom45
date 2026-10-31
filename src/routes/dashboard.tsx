@@ -39,7 +39,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const inputClass =
-  "w-full min-h-12 rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white";
+  "w-full min-h-12 rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
 
 function Dashboard() {
   const router = useRouter();
@@ -95,14 +95,14 @@ function Dashboard() {
 
   if (!data || !profile) {
     return (
-      <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+      <div className="min-h-dvh bg-page">
         <Header signedIn />
         <main className="mx-auto max-w-2xl space-y-4 px-4 py-8">
           <Card>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h1 className="text-lg font-bold text-body">
               Your plan isn&apos;t available yet
             </h1>
-            <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
+            <p className="mt-1.5 text-sm text-muted">
               The database isn&apos;t connected, so there are no saved numbers to show. This page fills
               in as soon as the connection is added.
             </p>
@@ -189,21 +189,21 @@ function Dashboard() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header signedIn />
       <main className="mx-auto max-w-2xl space-y-3.5 px-4 py-5 sm:space-y-4 sm:py-6">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Path to 45</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+          <h1 className="text-2xl font-black tracking-tight text-body">Path to 45</h1>
+          <p className="mt-1 text-sm text-muted">
             Hi {profile.profession ? profile.profession : "there"} — here&apos;s what your own numbers do
             over time.
           </p>
         </div>
 
         {/* ------------------------------------------------------- the answer */}
-        <section className="rounded-3xl bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 text-white shadow-lg shadow-emerald-900/15">
-          <div className="flex items-center gap-1.5 text-[11px] font-bold tracking-[0.12em] text-emerald-50/90 uppercase">
-            <IconTarget size={15} />
+        <section className="rounded-card border border-line bg-surface p-5">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold tracking-[0.12em] text-muted uppercase">
+            <IconTarget size={15} className="text-accent" />
             Estimated freedom date
           </div>
           {projection.fiAge === null ? (
@@ -211,7 +211,7 @@ function Dashboard() {
           ) : (
             <p className="numeric mt-1 text-[3.4rem] leading-[1] font-black">Age {fmtAge(projection.fiAge)}</p>
           )}
-          <p className="mt-3 text-sm leading-relaxed text-emerald-50/95">{paceNote()}</p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">{paceNote()}</p>
 
           <div className="mt-4 grid grid-cols-2 gap-2.5">
             <HeroStat
@@ -229,12 +229,12 @@ function Dashboard() {
           <button
             type="button"
             onClick={toggleEditing}
-            className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-4 text-base font-bold text-emerald-800 shadow-sm transition-colors hover:bg-emerald-50 active:bg-emerald-100"
+            className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-surface px-4 text-base font-bold text-accent transition-colors hover:bg-accent-fill/12 active:bg-accent-fill/20"
           >
             {editing ? "Close the number form" : "Update my numbers"}
             {editing ? null : <IconArrowRight size={18} />}
           </button>
-          <p className="mt-2 text-center text-[11px] text-emerald-50/80">
+          <p className="mt-2 text-center text-[11px] text-faint">
             An estimate based on your assumptions — never a promise.
           </p>
         </section>
@@ -259,9 +259,9 @@ function Dashboard() {
               step={0.5}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
-              className="w-full accent-emerald-600"
+              className="w-full accent-accent-fill"
             />
-            <div className="flex justify-between text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="flex justify-between text-[11px] text-muted">
               <span>3% (cautious)</span>
               <span>5% (default)</span>
               <span>7% (optimistic)</span>
@@ -276,7 +276,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={toggleEditing}
-                className="-mr-1 inline-flex min-h-11 items-center rounded-xl px-2 text-sm font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                className="-mr-1 inline-flex min-h-11 items-center rounded-xl px-2 text-sm font-semibold text-muted hover:text-body"
               >
                 Cancel
               </button>
@@ -284,7 +284,7 @@ function Dashboard() {
           </SectionTitle>
 
           {saved ? (
-            <p className="mt-2 flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">
+            <p className="mt-2 flex items-center gap-2 rounded-xl bg-accent-fill/12 p-3 text-sm font-medium text-accent">
               <IconCheck size={18} />
               Saved — your path above is up to date.
             </p>
@@ -335,26 +335,26 @@ function Dashboard() {
             </div>
           ) : (
             <>
-              <dl className="mt-2 divide-y divide-slate-100 text-sm dark:divide-white/10">
+              <dl className="mt-2 divide-y divide-line text-sm">
                 <Row label="Money in each month" value={money(profile.monthlyIncome, currency)} />
                 <Row label="Money out each month" value={money(spending, currency)} />
                 <Row label="Saved so far" value={money(profile.currentSavings, currency)} />
                 <Row label="Target age" value={String(targetAge)} />
               </dl>
-              <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+              <p className="mt-3 text-xs text-muted">
                 Change anything here when your pay, rent or savings move — each save adds a check-in to
                 the trend below.
               </p>
               {spendCount > 0 ? (
-                <p className="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                <p className="mt-2 text-xs leading-relaxed text-muted">
                   Your estimated date uses{" "}
-                  <strong className="text-slate-700 dark:text-slate-200">{money(spending, currency)}</strong>{" "}
+                  <strong className="text-body">{money(spending, currency)}</strong>{" "}
                   a month of spending —{" "}
                   {spendingBasis === "logs"
                     ? `the rate your ${spendCount} logged ${spendCount === 1 ? "spend" : "spends"} this month point to`
                     : "the number on your profile, which is higher than your logged rate"}{" "}
                   — so logging spends moves the date.{" "}
-                  <Link to="/spending" className="font-semibold text-emerald-700 underline dark:text-emerald-400">
+                  <Link to="/spending" className="font-semibold text-accent underline">
                     Log a spend
                   </Link>
                 </p>
@@ -367,14 +367,14 @@ function Dashboard() {
         <Card>
           <SectionTitle icon={<IconTrendUp size={18} />} title="Progress over time">
             {snapshots.length > 1 ? (
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:bg-white/10 dark:text-slate-300">
+              <span className="rounded-full bg-surface-2 px-2.5 py-1 text-[11px] font-semibold text-muted">
                 {snapshots.length} check-ins
               </span>
             ) : null}
           </SectionTitle>
           {snapshots.length <= 1 ? (
             <div className="mt-2">
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-muted">
                 You&apos;ve got one check-in so far — that&apos;s the starting line. Save your numbers
                 again in a month or two and the trend appears here, so you can see the pace actually
                 moving.
@@ -385,7 +385,7 @@ function Dashboard() {
             </div>
           ) : (
             <>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-sm text-muted">
                 {change >= 0 ? "Up" : "Down"} {money(Math.abs(change), currency)} since your first
                 check-in on {shortDate(first?.createdAt ?? "")}.
               </p>
@@ -393,13 +393,13 @@ function Dashboard() {
                 {[...snapshots].reverse().slice(0, 8).map((snapshot) => (
                   <li
                     key={snapshot.id}
-                    className="flex items-center justify-between border-b border-slate-100 py-2.5 text-sm last:border-0 dark:border-white/10"
+                    className="flex items-center justify-between border-b border-line py-2.5 text-sm last:border-0"
                   >
-                    <span className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                    <span className="flex items-center gap-2 text-muted">
                       <IconClock size={15} />
                       {shortDate(snapshot.createdAt)}
                     </span>
-                    <span className="font-semibold text-slate-900 dark:text-white">
+                    <span className="font-semibold text-body">
                       {money(snapshot.savings, currency)} saved
                     </span>
                   </li>
@@ -412,7 +412,7 @@ function Dashboard() {
         {/* ---------------------------------------------------- assumptions */}
         <Card>
           <SectionTitle icon={<IconInfo size={18} />} title="What this illustration assumes" />
-          <ul className="mt-2 space-y-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+          <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">
             <li>
               • Your money grows at <strong>{rate}% a year</strong>, compounded monthly. Real returns
               bounce around and can be negative in a given year.
@@ -436,13 +436,13 @@ function Dashboard() {
         {/* -------------------------------------------------------- next step */}
         <Card>
           <SectionTitle icon={<IconBolt size={18} />} title="Next step" />
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+          <p className="mt-2 text-sm text-muted">
             Your own money is only half of the path. Tell us how many hours you have and the side
             hustles you could actually run appear in a ranked list.
           </p>
           <Link
             to="/side-hustles"
-            className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 text-base font-semibold text-white shadow-sm shadow-emerald-600/25 transition-colors hover:bg-emerald-500"
+            className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent-fill px-4 text-base font-semibold text-on-accent transition-colors hover:bg-accent-fill-hover"
           >
             Find side hustles that suit you
             <IconArrowRight size={18} />
@@ -458,12 +458,12 @@ function Dashboard() {
 
 function HeroStat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-white/15 p-3">
-      <dt className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-50/90">
+    <div className="rounded-card border border-line bg-surface-2 p-3">
+      <dt className="flex items-center gap-1.5 text-[11px] font-medium text-muted">
         {icon}
         {label}
       </dt>
-      <dd className="numeric mt-0.5 text-lg font-bold text-white">{value}</dd>
+      <dd className="numeric mt-0.5 text-lg font-bold text-body">{value}</dd>
     </div>
   );
 }
@@ -479,8 +479,8 @@ function SectionTitle({
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
-        <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">
+      <h2 className="flex items-center gap-2 text-sm font-bold text-body">
+        <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent-fill/12 text-accent">
           {icon}
         </span>
         {title}
@@ -493,8 +493,8 @@ function SectionTitle({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between py-2.5">
-      <dt className="text-slate-600 dark:text-slate-300">{label}</dt>
-      <dd className="numeric font-semibold text-slate-900 dark:text-white">{value}</dd>
+      <dt className="text-muted">{label}</dt>
+      <dd className="numeric font-semibold text-body">{value}</dd>
     </div>
   );
 }
