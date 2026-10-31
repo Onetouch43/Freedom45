@@ -155,7 +155,7 @@ export const LEGAL_TABS: LegalTab[] = [
         heading: "Where it is stored",
         blocks: [
           p(
-            "Our hosting provider is Vercel, and your data sits in a managed PostgreSQL database run by Neon. Both act as processors on our instructions: they host and run the app and the data, and they do not use your information for their own purposes.",
+            "Our hosting provider is [HOSTING PROVIDER TO BE CONFIRMED BEFORE PUBLIC LAUNCH], and your data sits in a managed PostgreSQL database run by Neon. Both act as processors on our instructions: they host and run the app and the data, and they do not use your information for their own purposes.",
           ),
           p(
             "We never sell your data — not to anyone, ever. We do not share it for advertising, and there are no ad networks or cross-site trackers in the app.",
