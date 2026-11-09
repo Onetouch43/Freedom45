@@ -15,6 +15,15 @@ export function money(amount: number, currency = "GBP"): string {
   return `${sign}${currencySymbol(currency)}${digits}`;
 }
 
+/** "£1,234.56" from integer pence, keeping the pennies when there are any. */
+export function moneyPence(pence: number, currency = "GBP"): string {
+  const value = (Number.isFinite(pence) ? Math.round(pence) : 0) / 100;
+  const whole = Math.trunc(value);
+  const pennies = Math.round((value - whole) * 100);
+  const base = money(whole, currency);
+  return pennies === 0 ? base : `${base}.${String(pennies).padStart(2, "0")}`;
+}
+
 export function number(value: number): string {
   return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

@@ -30,7 +30,7 @@ function DisclaimerPage() {
         signedIn={signedIn}
         title="Disclaimers"
         intro={
-          <p className="rounded-xl border border-amber-300/70 bg-amber-50 p-3 text-sm font-medium text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-100">
+          <p className="rounded-xl border border-warn/40 bg-warn-fill/12 p-3 text-sm font-medium text-warn">
             {DISCLAIMER_TEXT}
           </p>
         }

@@ -46,11 +46,11 @@ function Login() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header />
       <main className="mx-auto max-w-md px-4 py-8">
-        <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Welcome back</h1>
-        <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
+        <h1 className="text-2xl font-black tracking-tight text-body">Welcome back</h1>
+        <p className="mt-1.5 text-sm text-muted">
           Log in to see your Path to 45.
         </p>
 
@@ -66,7 +66,7 @@ function Login() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white"
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
                 placeholder="you@example.com"
               />
             </div>
@@ -79,7 +79,7 @@ function Login() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white"
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
                 placeholder="your password"
               />
             </div>
@@ -90,9 +90,9 @@ function Login() {
           </form>
         </Card>
 
-        <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
+        <p className="mt-4 text-center text-sm text-muted">
           New here?{" "}
-          <Link to="/signup" className="font-semibold text-emerald-700 dark:text-emerald-400">
+          <Link to="/signup" className="font-semibold text-accent">
             Create an account
           </Link>
         </p>

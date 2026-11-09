@@ -46,7 +46,7 @@ const STEP_TITLES = [
 ];
 
 const inputClass =
-  "w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white";
+  "w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
 
 function Onboarding() {
   const { signedIn, dbConnected } = Route.useRouteContext();
@@ -98,7 +98,7 @@ function Onboarding() {
 
   if (!dbConnected || !signedIn) {
     return (
-      <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+      <div className="min-h-dvh bg-page">
         <Header signedIn={signedIn} />
         <main className="mx-auto max-w-md space-y-4 px-4 py-8">
           <DbNotice what="your plan" />
@@ -110,19 +110,19 @@ function Onboarding() {
   const progress = Math.round(((step + 1) / STEP_TITLES.length) * 100);
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header signedIn />
       <main className="mx-auto max-w-md px-4 py-6">
         <div className="mb-4">
-          <div className="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
+          <div className="flex items-center justify-between text-xs font-medium text-muted">
             <span>
               Step {step + 1} of {STEP_TITLES.length} · {STEP_TITLES[step]}
             </span>
             <span>{progress}%</span>
           </div>
-          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
             <div
-              className="h-full rounded-full bg-emerald-600 transition-all duration-300"
+              className="h-full rounded-full bg-accent-fill transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -132,7 +132,7 @@ function Onboarding() {
           <div className="space-y-4">
             {step === 0 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl font-bold text-body">
                   What do you do right now?
                 </h1>
                 <div>
@@ -181,7 +181,7 @@ function Onboarding() {
 
             {step === 1 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl font-bold text-body">
                   How many hours a week could you put towards something of your own?
                 </h1>
                 <div className="grid grid-cols-3 gap-2">
@@ -191,16 +191,16 @@ function Onboarding() {
                       type="button"
                       onClick={() => update("hoursFreePerWeek", hours)}
                       className={`rounded-xl border px-3 py-3 text-sm font-semibold transition-colors ${
-                        form.hoursFreePerWeek === hours
-                          ? "border-emerald-600 bg-emerald-600 text-white"
-                          : "border-slate-300 bg-white text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200"
-                      }`}
+ form.hoursFreePerWeek === hours
+ ? "border-accent-fill bg-accent-fill text-on-accent"
+ : "border-line-strong bg-surface text-body "
+ }`}
                     >
                       {hours} hrs
                     </button>
                   ))}
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-muted">
                   A rough guess is fine — you can change it later. Most people start with 4–8.
                 </p>
               </>
@@ -208,10 +208,10 @@ function Onboarding() {
 
             {step === 2 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl font-bold text-body">
                   What are you good at?
                 </h1>
-                <p className="text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-sm text-muted">
                   Tap anything that sounds like you — or skip it.
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -224,10 +224,10 @@ function Onboarding() {
                         onClick={() => toggleSkill(skill)}
                         aria-pressed={on}
                         className={`rounded-full border px-3 py-2 text-sm font-medium transition-colors ${
-                          on
-                            ? "border-emerald-600 bg-emerald-600 text-white"
-                            : "border-slate-300 bg-white text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200"
-                        }`}
+ on
+ ? "border-accent-fill bg-accent-fill text-on-accent"
+ : "border-line-strong bg-surface text-body "
+ }`}
                       >
                         {skill}
                       </button>
@@ -257,7 +257,7 @@ function Onboarding() {
 
             {step === 3 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl font-bold text-body">
                   Money in, money out
                 </h1>
                 <div>
@@ -284,7 +284,7 @@ function Onboarding() {
                     className={inputClass}
                   />
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-muted">
                   Rough monthly averages are enough. Everything stays on your own account.
                 </p>
               </>
@@ -292,10 +292,10 @@ function Onboarding() {
 
             {step === 4 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl font-bold text-body">
                   What have you saved so far?
                 </h1>
-                <p className="text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-sm text-muted">
                   Savings and investments you could put towards being free — a rough number is fine.
                 </p>
                 <input
@@ -312,7 +312,7 @@ function Onboarding() {
 
             {step === 5 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl font-bold text-body">
                   When do you want to be free?
                 </h1>
                 <div>
@@ -340,7 +340,7 @@ function Onboarding() {
                     onChange={(e) => update("targetFreedomAge", Number(e.target.value))}
                     className={inputClass}
                   />
-                  <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
+                  <p className="mt-1.5 text-xs text-muted">
                     Default is 45 — change it if you like.
                   </p>
                 </div>
@@ -349,29 +349,29 @@ function Onboarding() {
 
             {step === 6 ? (
               <>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">Before you start</h1>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                <h1 className="text-xl font-bold text-body">Before you start</h1>
+                <p className="text-sm leading-relaxed text-muted">
                   Two ticks, then we build your path. You can delete everything later in Settings.
                 </p>
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-300 p-3 dark:border-white/15">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line-strong p-3">
                   <input
                     type="checkbox"
                     checked={ageOk}
                     onChange={(e) => setAgeOk(e.target.checked)}
-                    className="mt-0.5 h-5 w-5 shrink-0 accent-emerald-600"
+                    className="mt-0.5 h-5 w-5 shrink-0 accent-accent-fill"
                   />
-                  <span className="text-sm text-slate-700 dark:text-slate-200">
+                  <span className="text-sm text-body">
                     I confirm I am 18 or over and live in the UK.
                   </span>
                 </label>
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-300 p-3 dark:border-white/15">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line-strong p-3">
                   <input
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-0.5 h-5 w-5 shrink-0 accent-emerald-600"
+                    className="mt-0.5 h-5 w-5 shrink-0 accent-accent-fill"
                   />
-                  <span className="text-sm text-slate-700 dark:text-slate-200">
+                  <span className="text-sm text-body">
                     I agree to the{" "}
                     <Link to="/terms" className="font-semibold underline underline-offset-2">
                       Terms of Service
@@ -384,7 +384,7 @@ function Onboarding() {
                     financial advice.
                   </span>
                 </label>
-                <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                <p className="text-xs leading-relaxed text-muted">
                   Freedom45 provides educational estimates only. Not financial, investment, or tax
                   advice.
                 </p>
