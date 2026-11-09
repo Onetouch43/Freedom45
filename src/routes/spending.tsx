@@ -27,7 +27,7 @@ export const Route = createFileRoute("/spending")({
 });
 
 const inputClass =
-  "w-full min-h-12 rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 dark:border-white/15 dark:bg-white/5 dark:text-white";
+  "w-full min-h-12 rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
 
 const dayLabel = (iso: string): string => {
   const date = new Date(`${iso}T00:00:00`);
@@ -73,12 +73,12 @@ function SpendingPage() {
 
   if (!data) {
     return (
-      <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+      <div className="min-h-dvh bg-page">
         <Header signedIn />
         <main className="mx-auto max-w-2xl px-4 py-8">
           <Card>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white">Spending isn&apos;t available yet</h1>
-            <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
+            <h1 className="text-lg font-bold text-body">Spending isn&apos;t available yet</h1>
+            <p className="mt-1.5 text-sm text-muted">
               The database isn&apos;t connected, so there is nowhere to save a spend yet.
             </p>
           </Card>
@@ -96,12 +96,12 @@ function SpendingPage() {
   ];
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-dvh bg-page">
       <Header signedIn />
       <main className="mx-auto max-w-2xl space-y-3.5 px-4 py-5 sm:space-y-4 sm:py-6">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Spending</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+          <h1 className="text-2xl font-black tracking-tight text-body">Spending</h1>
+          <p className="mt-1 text-sm text-muted">
             Log a spend in a few taps. Everything here comes from what you type in — no bank logins.
           </p>
         </div>
@@ -116,10 +116,10 @@ function SpendingPage() {
                   key={alert.kind}
                   role="status"
                   className={`rounded-2xl border p-3.5 ${
-                    isBudget
-                      ? "border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-400/40 dark:bg-rose-500/15 dark:text-rose-100"
-                      : "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-400/40 dark:bg-amber-400/15 dark:text-amber-100"
-                  }`}
+ isBudget
+ ? "border-danger/40 bg-danger-fill/14 text-danger "
+ : "border-warn/40 bg-warn-fill/12 text-warn "
+ }`}
                 >
                   <p className="flex items-center gap-2 text-base font-bold">
                     <IconInfo size={18} />
@@ -133,8 +133,8 @@ function SpendingPage() {
         ) : null}
 
         {data.needsIncome ? (
-          <div className="rounded-2xl border border-slate-300 bg-white p-3.5 text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200">
-            <p className="flex items-center gap-2 text-base font-bold text-slate-900 dark:text-white">
+          <div className="rounded-2xl border border-line-strong bg-surface p-3.5 text-body">
+            <p className="flex items-center gap-2 text-base font-bold text-body">
               <IconInfo size={18} />
               Finish your numbers to see a budget
             </p>
@@ -144,7 +144,7 @@ function SpendingPage() {
             </p>
             <Link
               to="/dashboard"
-              className="mt-2.5 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-slate-100 px-3 text-sm font-semibold text-slate-800 dark:bg-white/10 dark:text-white"
+              className="mt-2.5 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-surface-2 px-3 text-sm font-semibold text-body"
             >
               Add my income
               <IconArrowRight size={16} />
@@ -154,8 +154,8 @@ function SpendingPage() {
 
         {/* ------------------------------------------------------ quick add */}
         <Card>
-          <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">
+          <h2 className="flex items-center gap-2 text-sm font-bold text-body">
+            <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent-fill/12 text-accent">
               <IconWallet size={18} />
             </span>
             Quick add
@@ -206,7 +206,7 @@ function SpendingPage() {
             </div>
 
             <fieldset>
-              <legend className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              <legend className="mb-1.5 block text-sm font-medium text-body">
                 Paid by
               </legend>
               <div className="grid grid-cols-2 gap-2">
@@ -219,10 +219,10 @@ function SpendingPage() {
                       aria-pressed={active}
                       onClick={() => setPaymentMethod(method)}
                       className={`min-h-12 rounded-xl border text-base font-semibold capitalize transition-colors ${
-                        active
-                          ? "border-emerald-600 bg-emerald-600 text-white"
-                          : "border-slate-300 bg-white text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200"
-                      }`}
+ active
+ ? "border-accent-fill bg-accent-fill text-on-accent"
+ : "border-line-strong bg-surface text-body "
+ }`}
                     >
                       {method}
                     </button>
@@ -246,7 +246,7 @@ function SpendingPage() {
 
             <ErrorNote>{error}</ErrorNote>
             {justSaved ? (
-              <p className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">
+              <p className="flex items-center gap-2 rounded-xl bg-accent-fill/12 p-3 text-sm font-medium text-accent">
                 <IconCheck size={18} />
                 {justSaved}
               </p>
@@ -260,8 +260,8 @@ function SpendingPage() {
 
         {/* --------------------------------------------------------- chart */}
         <Card>
-          <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">
+          <h2 className="flex items-center gap-2 text-sm font-bold text-body">
+            <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent-fill/12 text-accent">
               <IconTrendUp size={18} />
             </span>
             This month: spending vs saving
@@ -269,7 +269,7 @@ function SpendingPage() {
 
           <MonthBars spentPence={month.spentPence} savedPence={month.savedPence} incomePence={month.incomePence} />
 
-          <p className="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+          <p className="mt-3 text-xs leading-relaxed text-muted">
             {month.incomePence > 0
               ? `Day ${month.daysElapsed} of ${month.daysInMonth}. Spending is what you've logged this month; saving is your monthly income minus that.`
               : "Spending is what you've logged this month. Add your income on the dashboard to see the saving side too."}
@@ -278,11 +278,11 @@ function SpendingPage() {
 
         {/* -------------------------------------------------------- insight */}
         <Card>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white">This week vs last week</h2>
+          <h2 className="text-sm font-bold text-body">This week vs last week</h2>
           {data.insight ? (
-            <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{data.insight}</p>
+            <p className="mt-2 text-sm leading-relaxed text-body">{data.insight}</p>
           ) : (
-            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-sm leading-relaxed text-muted">
               Nothing to compare yet — log a few spends over the next week and this line tells you which
               category moved.
             </p>
@@ -291,13 +291,13 @@ function SpendingPage() {
 
         {/* ----------------------------------------------------------- list */}
         <Card>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white">Recent spends</h2>
+          <h2 className="text-sm font-bold text-body">Recent spends</h2>
           {data.spends.length === 0 ? (
-            <div className="mt-2 rounded-xl bg-slate-50 p-4 text-center dark:bg-white/5">
-              <p className="text-base font-semibold text-slate-800 dark:text-white">
+            <div className="mt-2 rounded-xl bg-page p-4 text-center">
+              <p className="text-base font-semibold text-body">
                 No spends yet — add your first coffee
               </p>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+              <p className="mt-1 text-sm text-muted">
                 Use Quick add above. One tap and it appears here.
               </p>
             </div>
@@ -306,27 +306,27 @@ function SpendingPage() {
               {groups.map((group) =>
                 group.rows.length === 0 ? null : (
                   <div key={group.name}>
-                    <p className="text-[11px] font-bold tracking-[0.12em] text-slate-500 uppercase dark:text-slate-400">
+                    <p className="text-[11px] font-bold tracking-[0.12em] text-muted uppercase">
                       {group.name}
                     </p>
-                    <ul className="mt-1 divide-y divide-slate-100 dark:divide-white/10">
+                    <ul className="mt-1 divide-y divide-line">
                       {group.rows.map((spend) => (
                         <li key={spend.id} className="flex items-center justify-between gap-3 py-2.5">
                           <div className="min-w-0">
-                            <p className="truncate text-base font-semibold text-slate-900 dark:text-white">
+                            <p className="truncate text-base font-semibold text-body">
                               {spend.category}
                               {spend.note ? (
-                                <span className="font-normal text-slate-500 dark:text-slate-400">
+                                <span className="font-normal text-muted">
                                   {" "}
                                   · {spend.note}
                                 </span>
                               ) : null}
                             </p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                            <p className="text-xs text-muted">
                               {dayLabel(spend.spentAt)} · {spend.paymentMethod}
                             </p>
                           </div>
-                          <span className="numeric shrink-0 text-base font-bold text-slate-900 dark:text-white">
+                          <span className="numeric shrink-0 text-base font-bold text-body">
                             {pounds(spend.amountPence)}
                           </span>
                         </li>
@@ -340,8 +340,8 @@ function SpendingPage() {
         </Card>
 
         <Card>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white">How these figures are worked out</h2>
-          <ul className="mt-2 space-y-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+          <h2 className="text-sm font-bold text-body">How these figures are worked out</h2>
+          <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">
             <li>
               • <strong>This month&apos;s spending</strong> adds up every spend you have logged with a date
               inside the current calendar month.
@@ -386,12 +386,12 @@ function MonthBars({
 }) {
   const max = Math.max(spentPence, savedPence, 1);
   const rows = [
-    { label: "Spent", pence: spentPence, colour: "bg-rose-500", track: "bg-rose-100 dark:bg-rose-500/20" },
+    { label: "Spent", pence: spentPence, colour: "bg-danger-fill", track: "bg-danger-fill/20 " },
     {
       label: "Saved",
       pence: savedPence,
-      colour: "bg-emerald-600",
-      track: "bg-emerald-100 dark:bg-emerald-500/20",
+      colour: "bg-accent-fill",
+      track: "bg-accent-fill/20 ",
     },
   ];
   const total = spentPence + savedPence;
@@ -401,8 +401,8 @@ function MonthBars({
       {rows.map((row) => (
         <div key={row.label}>
           <div className="flex items-baseline justify-between gap-2 text-sm">
-            <span className="font-semibold text-slate-700 dark:text-slate-200">{row.label}</span>
-            <span className="numeric font-bold text-slate-900 dark:text-white">{pounds(row.pence)}</span>
+            <span className="font-semibold text-body">{row.label}</span>
+            <span className="numeric font-bold text-body">{pounds(row.pence)}</span>
           </div>
           <div
             className={`mt-1 h-4 w-full overflow-hidden rounded-full ${row.track}`}
@@ -417,7 +417,7 @@ function MonthBars({
         </div>
       ))}
       {incomePence > 0 && total > 0 ? (
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-muted">
           Of {pounds(incomePence)} in, {Math.round((spentPence / incomePence) * 100)}% is logged as spent so
           far this month.
         </p>

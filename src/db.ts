@@ -212,6 +212,12 @@ export const DDL: string[] = [
   `alter table profiles add column if not exists consent_at timestamptz`,
   `alter table profiles add column if not exists age_confirmed boolean not null default false`,
 
+  // What-if sliders the user chose to keep. Stored ON THE PROFILE, so "delete
+  // everything" already removes them with the profile row — no new table, no new
+  // delete path to prove. 0 means "nothing committed".
+  `alter table profiles add column if not exists extra_monthly_saving numeric(12,2) not null default 0`,
+  `alter table profiles add column if not exists family_support_monthly numeric(12,2) not null default 0`,
+
   `create table if not exists sessions (
      token text primary key,
      user_id integer not null references users(id) on delete cascade,

@@ -25,7 +25,7 @@ export function PathChart({
   currency: string;
 }) {
   if (points.length < 2) {
-    return <p className="text-sm text-slate-500 dark:text-slate-400">Add your numbers to see the curve.</p>;
+    return <p className="text-sm text-muted">Add your numbers to see the curve.</p>;
   }
 
   const minAge = points[0].age;
@@ -49,8 +49,8 @@ export function PathChart({
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Projected balance by age">
       <defs>
         <linearGradient id="f45fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#059669" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#059669" stopOpacity="0.02" />
+          <stop offset="0%" stopColor="var(--color-accent-fill)" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="var(--color-accent-fill)" stopOpacity="0.02" />
         </linearGradient>
       </defs>
 
@@ -63,11 +63,11 @@ export function PathChart({
             y1={fiY}
             x2={W - 8}
             y2={fiY}
-            stroke="#f59e0b"
+            stroke="var(--color-warn-fill)"
             strokeWidth="1"
             strokeDasharray="4 3"
           />
-          <text x={PAD_X} y={fiY - 3} fontSize="7.5" fill="#b45309">
+          <text x={PAD_X} y={fiY - 3} fontSize="7.5" fill="var(--color-warn)">
             target {money(fiNumber, currency)}
           </text>
         </>
@@ -93,10 +93,10 @@ export function PathChart({
       ) : null}
 
       <path d={area} fill="url(#f45fill)" />
-      <path d={line} fill="none" stroke="#059669" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      <path d={line} fill="none" stroke="var(--color-accent-fill)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
 
       {fiAge !== null && fiAge >= minAge && fiAge <= maxAge ? (
-        <circle cx={x(fiAge)} cy={y(fiNumber)} r="3" fill="#059669" stroke="#fff" strokeWidth="1.2" />
+        <circle cx={x(fiAge)} cy={y(fiNumber)} r="3" fill="var(--color-accent-fill)" stroke="var(--color-surface)" strokeWidth="1.2" />
       ) : null}
 
       {/* axis labels */}

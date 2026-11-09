@@ -35,13 +35,13 @@ export const NAV_DESTINATIONS: Destination[] = [
 export function Header({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <>
-    <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 backdrop-blur-md dark:border-white/10 dark:bg-slate-950/80">
+    <header className="sticky top-0 z-20 border-b border-line bg-page/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-2.5">
         <Link
           to="/"
-          className="flex min-h-11 items-center gap-2 rounded-xl pr-2 font-bold tracking-tight text-slate-900 dark:text-white"
+          className="flex min-h-11 items-center gap-2 rounded-xl pr-2 font-bold tracking-tight text-body"
         >
-          <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-600 text-white shadow-sm shadow-emerald-600/30">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent-fill text-on-accent">
             <IconGauge size={19} strokeWidth={2} />
           </span>
           <span className="text-[15px]">Freedom45</span>
@@ -57,10 +57,10 @@ export function Header({ signedIn = false }: { signedIn?: boolean }) {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-muted transition-colors hover:bg-surface-2 hover:text-body"
                     activeProps={{
                       className:
-                        "!bg-emerald-50 !text-emerald-800 dark:!bg-emerald-400/15 dark:!text-emerald-300",
+                        "!bg-accent-fill/12 !text-accent  ",
                     }}
                   >
                     <Icon size={20} />
@@ -72,8 +72,8 @@ export function Header({ signedIn = false }: { signedIn?: boolean }) {
             <Link
               to="/settings"
               aria-label="Settings"
-              className="grid min-h-11 min-w-11 place-items-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
-              activeProps={{ className: "!text-emerald-700 dark:!text-emerald-400" }}
+              className="grid min-h-11 min-w-11 place-items-center rounded-xl text-muted transition-colors hover:bg-surface-2 hover:text-body"
+              activeProps={{ className: "!text-accent " }}
             >
               <ICONS.settings size={20} />
             </Link>
@@ -83,20 +83,20 @@ export function Header({ signedIn = false }: { signedIn?: boolean }) {
           <nav className="flex items-center gap-1.5" aria-label="Main">
             <Link
               to="/side-hustles"
-              className="hidden min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-slate-600 hover:bg-slate-100 sm:inline-flex dark:text-slate-300 dark:hover:bg-white/10"
+              className="hidden min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-muted hover:bg-surface-2 sm:inline-flex"
             >
               <ICONS.hustles size={20} />
               Side hustles
             </Link>
             <Link
               to="/login"
-              className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10"
+              className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-muted hover:bg-surface-2"
             >
               Log in
             </Link>
             <Link
               to="/signup"
-              className="inline-flex min-h-11 items-center rounded-xl bg-emerald-600 px-3.5 text-sm font-semibold text-white shadow-sm shadow-emerald-600/25 hover:bg-emerald-500"
+              className="inline-flex min-h-11 items-center rounded-xl bg-accent-fill px-3.5 text-sm font-semibold text-on-accent hover:bg-accent-fill-hover"
             >
               Start free
             </Link>
@@ -117,7 +117,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Main"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_12px_rgba(15,23,42,0.06)] backdrop-blur-md sm:hidden dark:border-white/10 dark:bg-slate-950/95"
+      className="fixed inset-x-0 bottom-9 z-30 mx-2 rounded-card border border-line bg-surface/95 pb-[calc(env(safe-area-inset-bottom)+0.25rem)] backdrop-blur-md sm:hidden"
     >
       <ul className="mx-auto flex max-w-md items-stretch">
         {NAV_DESTINATIONS.map((item) => {
@@ -126,16 +126,16 @@ export function BottomNav() {
             <li key={item.to} className="flex-1">
               <Link
                 to={item.to}
-                className="group flex min-h-14 w-full flex-col items-center justify-center gap-0.5 px-0.5 py-2 text-[10px] leading-tight font-semibold text-slate-500 dark:text-slate-400"
-                activeProps={{ className: "!text-emerald-700 dark:!text-emerald-400" }}
+                className="group flex min-h-14 w-full flex-col items-center justify-center gap-0.5 px-0.5 py-2 text-[11px] leading-tight font-semibold text-faint"
+                activeProps={{ className: "!text-accent" }}
               >
                 {({ isActive }) => (
                   <>
                     <span
                       className={`grid h-8 w-11 place-items-center rounded-full transition-colors ${
                         isActive
-                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-400/20 dark:text-emerald-300"
-                          : "text-slate-500 group-hover:bg-slate-100 dark:text-slate-400 dark:group-hover:bg-white/10"
+                          ? "bg-accent-fill/20 text-accent"
+                          : "text-faint group-hover:bg-surface-2 group-hover:text-muted"
                       }`}
                     >
                       <Icon size={22} strokeWidth={isActive ? 2 : 1.75} />
@@ -167,7 +167,7 @@ function LogoutButton() {
           .then(() => navigate({ to: "/", replace: true }))
           .finally(() => setBusy(false));
       }}
-      className="inline-flex min-h-11 items-center rounded-xl px-2.5 text-sm font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
+      className="inline-flex min-h-11 items-center rounded-xl px-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-body disabled:opacity-50"
     >
       {busy ? "…" : "Log out"}
     </button>
@@ -175,5 +175,5 @@ function LogoutButton() {
 }
 
 export function Page({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">{children}</div>;
+  return <div className="min-h-dvh bg-page">{children}</div>;
 }

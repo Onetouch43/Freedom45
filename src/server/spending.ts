@@ -264,7 +264,9 @@ export const spendingPageFn = createServerFn().handler(async (): Promise<Spendin
         title: `You've used ${Math.round(usedPct)}% of this month's budget`,
         body: `${pounds(spentPence)} of the ${pounds(
           budgetPence,
-        )} your own numbers allow for this month, with ${daysInMonth - daysElapsed} days to go. Information only — not advice.`,
+        )} your own numbers allow for this month, with ${daysInMonth - daysElapsed} day${
+          daysInMonth - daysElapsed === 1 ? "" : "s"
+        } to go. Information only — not advice.`,
       });
     }
     const habit = await habitAlert(user.id);

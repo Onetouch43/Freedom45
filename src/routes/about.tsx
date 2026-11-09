@@ -99,7 +99,7 @@ function AboutPage() {
             Questions, corrections or a problem with your data:{" "}
             <Placeholder>{CONTACT_EMAIL_PLACEHOLDER}</Placeholder>.
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-muted">
             Freedom45 provides educational estimates only — see the{" "}
             <a className="underline underline-offset-2" href="/disclaimer">Disclaimers</a>.
           </p>

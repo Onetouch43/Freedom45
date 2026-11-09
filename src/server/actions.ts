@@ -3,6 +3,15 @@ import { createServerFn } from "@tanstack/react-start";
 import { HUSTLE_BY_KEY } from "~/data/side-hustles";
 import { DbNotConnectedError, ensureSchema, isDbConfigured, query } from "~/db";
 import {
+  NO_SLIDERS,
+  RETURN_DEFAULT,
+  buildCheckInState,
+  runScenario,
+  type CheckInState,
+  type ScenarioBase,
+  type ScenarioNumbers,
+} from "~/lib/scenario";
+import {
   createSession,
   destroySession,
   getSessionUser,
@@ -21,6 +30,10 @@ export type ProfileData = {
   monthlyIncome: number;
   currentSavings: number;
   monthlySpending: number;
+  /** What-if commitment kept from the sliders: extra put by each month, in pounds. */
+  extraMonthlySaving: number;
+  /** What-if commitment kept from the sliders: money sent to family each month, in pounds. */
+  familySupportMonthly: number;
   targetFreedomAge: number;
   currentAge: number;
   currency: string;
@@ -62,6 +75,8 @@ export type DashboardData = {
   monthSpentPence: number;
   /** How many spending_logs rows the user has in total (0 means "nothing logged yet"). */
   spendCount: number;
+  /** The weekly check-in card: suggestion, state, and the server's current estimate. */
+  checkIn: (CheckInState & { estimate: ScenarioNumbers }) | null;
 };
 
 export type MutationResult = { ok: true } | { ok: false; reason: string; message: string };
@@ -126,7 +141,8 @@ async function requireUser(): Promise<SessionUser | null> {
 async function loadProfile(userId: number): Promise<ProfileData | null> {
   const rows = await query<Record<string, unknown>>(
     `select profession, field, hours_free_per_week, skills, monthly_income,
-            current_savings, monthly_spending, target_freedom_age, current_age,
+            current_savings, monthly_spending, extra_monthly_saving, family_support_monthly,
+            target_freedom_age, current_age,
             currency, onboarded_at
        from profiles where user_id = $1`,
     [userId],
@@ -141,10 +157,25 @@ async function loadProfile(userId: number): Promise<ProfileData | null> {
     monthlyIncome: num(row.monthly_income),
     currentSavings: num(row.current_savings),
     monthlySpending: num(row.monthly_spending),
+    extraMonthlySaving: num(row.extra_monthly_saving),
+    familySupportMonthly: num(row.family_support_monthly),
     targetFreedomAge: num(row.target_freedom_age) || 45,
     currentAge: num(row.current_age) || 25,
     currency: text(row.currency) || "GBP",
     onboardedAt: row.onboarded_at ? String(row.onboarded_at) : null,
+  };
+}
+
+/** The profile's stored position in integer pence — the input to every illustration. */
+function scenarioBase(profile: ProfileData): ScenarioBase {
+  return {
+    currentAge: profile.currentAge || 25,
+    targetAge: profile.targetFreedomAge || 45,
+    currentSavingsPence: Math.round((profile.currentSavings || 0) * 100),
+    monthlyIncomePence: Math.round((profile.monthlyIncome || 0) * 100),
+    monthlySpendingPence: Math.round((profile.monthlySpending || 0) * 100),
+    extraMonthlySavingPence: Math.round((profile.extraMonthlySaving || 0) * 100),
+    familySupportPence: Math.round((profile.familySupportMonthly || 0) * 100),
   };
 }
 
@@ -263,6 +294,7 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
       snapshots: [],
       monthSpentPence: 0,
       spendCount: 0,
+      checkIn: null,
     };
   }
   try {
@@ -270,6 +302,14 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
     const profile = await loadProfile(user.id);
     const snapshots = await loadSnapshots(user.id);
     const totals = await loadSpendTotals(user.id);
+    // The check-in card's suggestion and its "before" estimate are both worked out
+    // here, on the server, from the user's own stored rows.
+    const checkIn = profile
+      ? {
+          ...buildCheckInState(scenarioBase(profile), snapshots),
+          estimate: runScenario(scenarioBase(profile), NO_SLIDERS, RETURN_DEFAULT),
+        }
+      : null;
     return {
       dbConnected,
       signedIn: true,
@@ -278,6 +318,7 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
       snapshots,
       monthSpentPence: totals.monthSpentPence,
       spendCount: totals.spendCount,
+      checkIn,
     };
   } catch {
     return {
@@ -288,6 +329,7 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
       snapshots: [],
       monthSpentPence: 0,
       spendCount: 0,
+      checkIn: null,
     };
   }
 });
