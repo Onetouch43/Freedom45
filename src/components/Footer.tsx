@@ -1,10 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import {
+  COMPANY_NAME,
+  COMPANY_TYPE,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  REGISTERED_ADDRESS_PLACEHOLDER,
+} from "~/lib/company";
+
 /**
  * The site-wide footer. Every page carries it — landing, money screens and the
  * legal set alike — so the "not financial advice" line, the disclaimers link and
- * the placeholder notice are never more than one screen away.
+ * the company details are never more than one screen away.
  *
  * LAYOUT: the signed-in phone bottom tab bar is `fixed` to the bottom of the
  * viewport, so a footer in the normal flow would end up underneath it. When
@@ -12,6 +20,7 @@ import type { ReactNode } from "react";
  * safe-area inset). The footer therefore sits ABOVE the nav, never over it.
  */
 export const LEGAL_LINKS = [
+  { to: "/pricing", label: "Pricing" },
   { to: "/legal", label: "Legal" },
   { to: "/disclaimer", label: "Disclaimers" },
   { to: "/privacy", label: "Privacy" },
@@ -47,12 +56,21 @@ export function Footer({ signedIn = false }: { signedIn?: boolean }) {
           </Link>
           .
         </p>
-        <p className="mt-2 text-xs leading-relaxed text-faint">
-          Company details are placeholders until the business is registered: legal name, company
-          number and registered address all read as marked placeholders below. Built for the UK.
+        <p className="mt-2 text-xs leading-relaxed text-muted">
+          Freedom45 is a product of {COMPANY_NAME}, {COMPANY_TYPE}. Registered address:{" "}
+          <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder>
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-muted">
+          <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
+            {CONTACT_EMAIL}
+          </a>{" "}
+          ·{" "}
+          <a className="underline underline-offset-2" href={`tel:${CONTACT_PHONE.replace(/[^\d+]/g, "")}`}>
+            {CONTACT_PHONE}
+          </a>
         </p>
         <p className="mt-2 text-xs text-faint">
-          © {new Date().getFullYear()} Freedom45 · Prices in pounds sterling.
+          © {new Date().getFullYear()} {COMPANY_NAME} · Freedom45 · Prices in pounds sterling.
         </p>
       </div>
     </footer>
@@ -117,8 +135,8 @@ export function Bullets({ items }: { items: ReactNode[] }) {
 
 /**
  * A detail we do not have yet. Deliberately loud so nobody mistakes it for real
- * text: the owner supplies the real company name / number / address and these
- * strings get replaced.
+ * text: the only company detail still missing is the registered address, and
+ * these strings get replaced the day the owner supplies it.
  */
 export function Placeholder({ children }: { children: ReactNode }) {
   return (
@@ -131,9 +149,3 @@ export function Placeholder({ children }: { children: ReactNode }) {
 /** The site's exact disclaimer wording, kept in one place. */
 export const DISCLAIMER_TEXT =
   "Freedom45 provides educational estimates only. Not financial, investment, or tax advice. Projections are illustrative and based on assumptions you provide. Past performance does not guarantee future results. Consult a licensed professional.";
-
-export const COMPANY_NAME_PLACEHOLDER = "COMPANY LEGAL NAME — to be confirmed";
-export const COMPANY_NUMBER_PLACEHOLDER = "COMPANY NUMBER — to be confirmed";
-export const COMPANY_ADDRESS_PLACEHOLDER = "REGISTERED ADDRESS — to be confirmed";
-export const PRIVACY_EMAIL_PLACEHOLDER = "PRIVACY CONTACT EMAIL — to be confirmed";
-export const CONTACT_EMAIL_PLACEHOLDER = "CONTACT EMAIL — to be confirmed";

@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "~/components/Header";
+import { Bullets, LegalPage, Placeholder, Section } from "~/components/Footer";
 import {
-  Bullets,
-  COMPANY_ADDRESS_PLACEHOLDER,
-  COMPANY_NAME_PLACEHOLDER,
-  COMPANY_NUMBER_PLACEHOLDER,
-  LegalPage,
-  Placeholder,
-  Section,
-} from "~/components/Footer";
+  COMPANY_NAME,
+  COMPANY_TYPE,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  GOVERNING_STATE_PLACEHOLDER,
+  REGISTERED_ADDRESS_PLACEHOLDER,
+} from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
 export const Route = createFileRoute("/terms")({
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/terms")({
   component: TermsPage,
 });
 
-const LAST_UPDATED = "21 October 2026";
+const LAST_UPDATED = "9 November 2026";
 
 function TermsPage() {
   const { signedIn } = Route.useRouteContext();
@@ -48,9 +48,13 @@ function TermsPage() {
       >
         <Section heading="1. Who we are and what this service is">
           <p>
-            Freedom45 is provided by <Placeholder>{COMPANY_NAME_PLACEHOLDER}</Placeholder>, company
-            number <Placeholder>{COMPANY_NUMBER_PLACEHOLDER}</Placeholder>, registered address{" "}
-            <Placeholder>{COMPANY_ADDRESS_PLACEHOLDER}</Placeholder> ("we", "us").
+            Freedom45 is provided by {COMPANY_NAME}, {COMPANY_TYPE}, of{" "}
+            <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder> ("we", "us"). You can reach
+            us at{" "}
+            <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>{" "}
+            or {CONTACT_PHONE}.
           </p>
           <p>Freedom45 is an educational calculator and tracker. It is:</p>
           <Bullets
@@ -68,8 +72,9 @@ function TermsPage() {
 
         <Section heading="2. Who can use it">
           <p>
-            You must be 18 or over and using Freedom45 for yourself, from the UK. The app works in
-            pounds sterling and describes UK arrangements. If you are under 18, please do not use it.
+            You must be 18 or over and using Freedom45 for yourself. The app works in pounds sterling
+            and describes UK arrangements, so the figures will not match arrangements elsewhere. If
+            you are under 18, please do not use it.
           </p>
         </Section>
 
@@ -105,15 +110,22 @@ function TermsPage() {
             entering any payment details.
           </p>
           <p>
-            A paid tier is planned at <strong>£6 per month or £59 per year</strong>, intended to
-            include Family Mode, scenarios and what-if sliders, PDF export, the full investment
-            library and no ads.{" "}
-            <strong>
-              It is not yet available and cannot be purchased — nothing in the app takes payment
-              today.
-            </strong>{" "}
-            When it becomes available, the price, what it includes and how to cancel will be shown
-            before you pay, and these terms will be updated.
+            The paid tier is <strong>£6 per month or £59 per year</strong>, and includes Family Mode,
+            scenarios and what-if sliders, PDF export, the full investment library and no ads. The
+            price and what it includes are shown on the{" "}
+            <a className="underline underline-offset-2" href="/pricing">pricing page</a> before you
+            pay.
+          </p>
+          <p>
+            Payments are processed by Stripe on Stripe's own payment page. We never see or store your
+            card details, and we never hold your money. Subscriptions renew automatically until you
+            cancel; you can cancel at any time and keep access to the paid features until the end of
+            the period you have already paid for. If you cancel, nothing further is charged.
+          </p>
+          <p>
+            <strong>Paying does not buy financial advice.</strong> The paid tier buys software
+            features only. It does not make us your adviser and does not create a fiduciary
+            relationship.
           </p>
         </Section>
 
@@ -164,15 +176,18 @@ function TermsPage() {
           </p>
           <p>
             Nothing in these terms limits or excludes any liability that cannot be limited or
-            excluded under the law of England and Wales — including liability for death or personal
-            injury caused by negligence, or for fraud.
+            excluded under the law of the State of{" "}
+            <Placeholder>{GOVERNING_STATE_PLACEHOLDER}</Placeholder>, United States — including
+            liability for death or personal injury caused by negligence, or for fraud.
           </p>
         </Section>
 
         <Section heading="11. Governing law">
           <p>
-            These terms are governed by the law of England and Wales, and the courts of England and
-            Wales have exclusive jurisdiction over any dispute about them.
+            These terms are governed by the laws of the State of{" "}
+            <Placeholder>{GOVERNING_STATE_PLACEHOLDER}</Placeholder>, United States, without regard
+            to its conflict-of-law rules, and the state and federal courts located there have
+            exclusive jurisdiction over any dispute about them.
           </p>
         </Section>
 
