@@ -20,6 +20,7 @@ export const Route = createFileRoute("/settings")({
 });
 
 const LEGAL_COPY: Record<string, string> = {
+  "/pricing": "Free tier and the £6/month or £59/year paid plan.",
   "/disclaimer": "What we are, what we are not, and how to read the estimates.",
   "/privacy": "Exactly what we store, and what we never collect.",
   "/terms": "The rules for using Freedom45.",

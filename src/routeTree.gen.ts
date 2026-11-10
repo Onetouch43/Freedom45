@@ -10,11 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SuccessRouteImport } from './routes/success'
 import { Route as SpendingRouteImport } from './routes/spending'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SideHustlesRouteImport } from './routes/side-hustles'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LegalRouteImport } from './routes/legal'
@@ -30,6 +32,11 @@ import { Route as ApiMigrateRouteImport } from './routes/api/migrate'
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessRoute = SuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpendingRoute = SpendingRouteImport.update({
@@ -55,6 +62,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -124,11 +136,13 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
   '/spending': typeof SpendingRoute
+  '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/api/migrate': typeof ApiMigrateRoute
 }
@@ -143,11 +157,13 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
   '/spending': typeof SpendingRoute
+  '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/api/migrate': typeof ApiMigrateRoute
 }
@@ -163,11 +179,13 @@ export interface FileRoutesById {
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
   '/spending': typeof SpendingRoute
+  '/success': typeof SuccessRoute
   '/terms': typeof TermsRoute
   '/api/migrate': typeof ApiMigrateRoute
 }
@@ -184,11 +202,13 @@ export interface FileRouteTypes {
     | '/legal'
     | '/login'
     | '/onboarding'
+    | '/pricing'
     | '/privacy'
     | '/settings'
     | '/side-hustles'
     | '/signup'
     | '/spending'
+    | '/success'
     | '/terms'
     | '/api/migrate'
   fileRoutesByTo: FileRoutesByTo
@@ -203,11 +223,13 @@ export interface FileRouteTypes {
     | '/legal'
     | '/login'
     | '/onboarding'
+    | '/pricing'
     | '/privacy'
     | '/settings'
     | '/side-hustles'
     | '/signup'
     | '/spending'
+    | '/success'
     | '/terms'
     | '/api/migrate'
   id:
@@ -222,11 +244,13 @@ export interface FileRouteTypes {
     | '/legal'
     | '/login'
     | '/onboarding'
+    | '/pricing'
     | '/privacy'
     | '/settings'
     | '/side-hustles'
     | '/signup'
     | '/spending'
+    | '/success'
     | '/terms'
     | '/api/migrate'
   fileRoutesById: FileRoutesById
@@ -242,11 +266,13 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRoute
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   SettingsRoute: typeof SettingsRoute
   SideHustlesRoute: typeof SideHustlesRoute
   SignupRoute: typeof SignupRoute
   SpendingRoute: typeof SpendingRoute
+  SuccessRoute: typeof SuccessRoute
   TermsRoute: typeof TermsRoute
   ApiMigrateRoute: typeof ApiMigrateRoute
 }
@@ -258,6 +284,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/spending': {
@@ -293,6 +326,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -386,11 +426,13 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRoute,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   SettingsRoute: SettingsRoute,
   SideHustlesRoute: SideHustlesRoute,
   SignupRoute: SignupRoute,
   SpendingRoute: SpendingRoute,
+  SuccessRoute: SuccessRoute,
   TermsRoute: TermsRoute,
   ApiMigrateRoute: ApiMigrateRoute,
 }

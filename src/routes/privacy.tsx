@@ -1,14 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "~/components/Header";
+import { Bullets, LegalPage, Placeholder, Section } from "~/components/Footer";
 import {
-  Bullets,
-  COMPANY_ADDRESS_PLACEHOLDER,
-  COMPANY_NAME_PLACEHOLDER,
-  LegalPage,
-  Placeholder,
-  PRIVACY_EMAIL_PLACEHOLDER,
-  Section,
-} from "~/components/Footer";
+  COMPANY_NAME,
+  COMPANY_TYPE,
+  CONTACT_EMAIL,
+  REGISTERED_ADDRESS_PLACEHOLDER,
+} from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
 export const Route = createFileRoute("/privacy")({
@@ -29,7 +27,7 @@ export const Route = createFileRoute("/privacy")({
   component: PrivacyPage,
 });
 
-const LAST_UPDATED = "21 October 2026";
+const LAST_UPDATED = "9 November 2026";
 
 function PrivacyPage() {
   const { signedIn } = Route.useRouteContext();
@@ -49,10 +47,13 @@ function PrivacyPage() {
       >
         <Section heading="Who is responsible">
           <p>
-            Freedom45 is run by <Placeholder>{COMPANY_NAME_PLACEHOLDER}</Placeholder> of{" "}
-            <Placeholder>{COMPANY_ADDRESS_PLACEHOLDER}</Placeholder>. We are the data controller for
-            the information described here. Privacy questions and requests:{" "}
-            <Placeholder>{PRIVACY_EMAIL_PLACEHOLDER}</Placeholder>.
+            Freedom45 is a product of {COMPANY_NAME}, {COMPANY_TYPE}, of{" "}
+            <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder>. We are the data controller
+            for the information described here. Privacy questions and requests:{" "}
+            <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>
+            .
           </p>
         </Section>
 
@@ -82,7 +83,7 @@ function PrivacyPage() {
               "No bank logins and no bank account connections — there is no bank linking in Freedom45 at all.",
               "No bank or card transactions. We never see your real transactions, only what you type.",
               "No ID documents, no passport or driving licence, no proof of address.",
-              "No payment details — the free tier asks for none. If a paid plan is offered later, payments would be handled by a payment provider and we would not store your card details.",
+              "No payment details — payments for the paid plan are handled by Stripe on its own payment page. We never see or store your card number.",
               "No advertising or cross-site tracking. We have no ad networks, no social pixels and no analytics that profile you across other websites.",
               "No data about anyone else. Please do not type another person's financial details into the app.",
             ]}
@@ -98,9 +99,18 @@ function PrivacyPage() {
             ]}
           />
           <p>
-            Our lawful basis under UK GDPR is the contract you enter into with us by using the
-            service, and our legitimate interest in keeping the app secure. We do not use your
-            figures for marketing, and we do not sell or rent your data to anyone, ever.
+            We only use your information to provide the service you asked for, and for our
+            legitimate interest in keeping the app secure. We do not use your figures for marketing,
+            and we do not sell or rent your data to anyone, ever.
+          </p>
+        </Section>
+
+        <Section heading="We do not sell your personal information">
+          <p>
+            <strong>We do not sell your personal information, and we do not share it for
+            cross-context behavioural advertising.</strong> We have no ad networks, no social pixels
+            and no analytics that profile you across other websites. We do not use or disclose your
+            sensitive personal information for any purpose beyond providing the app to you.
           </p>
         </Section>
 
@@ -109,8 +119,8 @@ function PrivacyPage() {
             Your data is stored in a managed Postgres database provided as hosted infrastructure.
             Connections to it, and to this website, are encrypted in transit (HTTPS). Only the app
             can reach the database; it is not a public service. Some hosting providers may process
-            data outside the UK — where that happens, the provider's standard contractual safeguards
-            apply.
+            data outside the state or country you live in — where that happens, the provider's
+            standard contractual safeguards apply.
           </p>
         </Section>
 
@@ -141,13 +151,16 @@ function PrivacyPage() {
         </Section>
 
         <Section heading="Your rights">
-          <p>Under UK GDPR you can ask us to:</p>
+          <p>
+            Under US state privacy laws — including the California Consumer Privacy Act (CCPA) as
+            amended by the CPRA, and similar laws in other states — you can ask us to:
+          </p>
           <Bullets
             items={[
               "give you a copy of the information we hold about you (access);",
               "correct anything that is wrong (rectification);",
               "delete everything (erasure) — the one-tap Delete my data button does this immediately;",
-              "restrict or object to how we use it;",
+              "tell you what we hold and who we share it with (the answer is nobody);",
               "give you your data in a portable format.",
             ]}
           />
@@ -155,25 +168,19 @@ function PrivacyPage() {
             You do not need to email us to delete your data: open{" "}
             <a className="underline underline-offset-2" href="/settings">Settings</a> and tap{" "}
             <strong>Delete my data</strong>. If you cannot sign in, email{" "}
-            <Placeholder>{PRIVACY_EMAIL_PLACEHOLDER}</Placeholder> and we will handle it for you. We
-            answer requests within one month.
+            <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>{" "}
+            and we will handle it for you. We answer requests within 45 days, and we will not
+            discriminate against you for making one.
           </p>
         </Section>
 
         <Section heading="Complaints">
           <p>
             If you are unhappy with how we handle your information, please tell us first so we can
-            put it right. You also have the right to complain to the UK information regulator, the
-            Information Commissioner's Office (ICO), at{" "}
-            <a
-              className="underline underline-offset-2"
-              href="https://ico.org.uk"
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              https://ico.org.uk
-            </a>
-            .
+            put it right. You can also complain to your state's attorney general, or — in
+            California — to the California Privacy Protection Agency.
           </p>
         </Section>
 

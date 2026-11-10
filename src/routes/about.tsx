@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "~/components/Header";
+import { Bullets, LegalPage, Placeholder, Section } from "~/components/Footer";
 import {
-  Bullets,
-  CONTACT_EMAIL_PLACEHOLDER,
-  LegalPage,
-  Placeholder,
-  Section,
-} from "~/components/Footer";
+  COMPANY_NAME,
+  COMPANY_TYPE,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  REGISTERED_ADDRESS_PLACEHOLDER,
+} from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
 export const Route = createFileRoute("/about")({
@@ -92,12 +93,23 @@ function AboutPage() {
             consumer rights. It is a deliberately UK product; the app says so rather than pretending
             to travel.
           </p>
+          <p>
+            The company behind it, {COMPANY_NAME}, is {COMPANY_TYPE} — the product is built for the
+            UK market, and the company is registered in the United States.
+          </p>
         </Section>
 
         <Section heading="Contact">
           <p>
             Questions, corrections or a problem with your data:{" "}
-            <Placeholder>{CONTACT_EMAIL_PLACEHOLDER}</Placeholder>.
+            <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>{" "}
+            or {CONTACT_PHONE}.
+          </p>
+          <p>
+            {COMPANY_NAME}, {COMPANY_TYPE}. Registered address:{" "}
+            <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder>.
           </p>
           <p className="text-sm text-muted">
             Freedom45 provides educational estimates only — see the{" "}

@@ -11,6 +11,7 @@ import {
   type LegalTabId,
 } from "~/lib/legalContent";
 import { APP_URL, APP_URL_LABEL } from "~/lib/site";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
 const TAB_IDS = LEGAL_TABS.map((tab) => tab.id);
@@ -75,6 +76,14 @@ function LegalTabsPage() {
             <div>
               <dt className="font-semibold text-muted">Effective date</dt>
               <dd className="text-body">{EFFECTIVE_DATE}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-muted">Email</dt>
+              <dd className="break-all text-body">{CONTACT_EMAIL}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-muted">Phone</dt>
+              <dd className="text-body">{CONTACT_PHONE}</dd>
             </div>
             <div>
               <dt className="font-semibold text-muted">Live app</dt>

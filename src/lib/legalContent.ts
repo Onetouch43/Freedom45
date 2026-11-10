@@ -5,28 +5,36 @@
  * can be word-counted from a script (the legal posture caps each tab at 400 words)
  * and edited without touching any layout code.
  *
- * THE PLACEHOLDERS ARE EXACT STRINGS. They are the only company detail we have,
- * and we must not invent any more: no made-up name, number, address or email.
- * The square brackets are part of the text — the page highlights them as-is.
+ * THE COMPANY DETAILS ARE REAL except the registered address and the governing
+ * state, which the owner has not supplied. Those two stay marked placeholders —
+ * we must not invent them. The square brackets are part of the text, so the page
+ * highlights them as-is.
  */
 
+import {
+  COMPANY_NAME,
+  COMPANY_TYPE,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  GOVERNING_STATE_PLACEHOLDER,
+  REGISTERED_ADDRESS_PLACEHOLDER,
+} from "./company";
+
 /** Business line, rendered at the top of /legal so every tab sits under it. */
-export const SOLE_TRADER_LINE =
-  "Freedom45 is a trading name of [SOLE TRADER NAME TO BE CONFIRMED BEFORE PUBLIC LAUNCH]";
+export const SOLE_TRADER_LINE = `Freedom45 is a trading name of ${COMPANY_NAME}`;
 
 /** Where users write to us. Appears wherever we ask someone to contact us. */
-export const SUPPORT_EMAIL = "[SUPPORT EMAIL TO BE CONFIRMED]";
+export const SUPPORT_EMAIL = CONTACT_EMAIL;
 
-/** Postal contact. The owner intends to use a virtual office address. */
-export const CONTACT_ADDRESS =
-  "[CONTACT ADDRESS TO BE CONFIRMED - user will use a virtual office address]";
+/** Postal contact. The owner still has to supply the registered address. */
+export const CONTACT_ADDRESS = `Registered address: [${REGISTERED_ADDRESS_PLACEHOLDER}]`;
 
 /** Shown as a visible "Effective date" line. */
-export const EFFECTIVE_DATE = "30 October 2026";
+export const EFFECTIVE_DATE = "9 November 2026";
 
 /** The draft banner, word for word. */
 export const DRAFT_BANNER =
-  "Pre-launch draft - company details to be confirmed before taking payments on custom domain";
+  "Pre-launch draft - registered address and governing state to be provided before taking payments on a custom domain";
 
 export type LegalBlock =
   | { kind: "p"; text: string }
@@ -113,7 +121,9 @@ export const LEGAL_TABS: LegalTab[] = [
             "We may update these terms. The effective date above shows which version is current; if you keep using Freedom45, the new version applies.",
           ),
           p(
-            "These terms are governed by the law of the part of the UK you live in, and any dispute will be dealt with by the courts of that part of the UK.",
+            "These terms are governed by the laws of the State of [" +
+              GOVERNING_STATE_PLACEHOLDER +
+              "], United States, and any dispute will be dealt with by the state or federal courts located there.",
           ),
         ],
       },
@@ -124,13 +134,13 @@ export const LEGAL_TABS: LegalTab[] = [
     label: "Privacy",
     title: "Privacy notice",
     summary:
-      "What we hold, where it lives, and how to get it back or delete it — under UK GDPR.",
+      "What we hold, where it lives, and how to get it back or delete it — under US state privacy law.",
     sections: [
       {
         heading: "Who is responsible",
         blocks: [
           p(
-            `The data controller is the sole trader named above. That means we decide what is collected and why, and we answer to you for it. Privacy questions, access requests and deletion requests: ${SUPPORT_EMAIL}.`,
+            `The data controller is ${COMPANY_NAME}, ${COMPANY_TYPE}. That means we decide what is collected and why, and we answer to you for it. Privacy questions, access requests and deletion requests: ${SUPPORT_EMAIL}.`,
           ),
         ],
       },
@@ -166,13 +176,13 @@ export const LEGAL_TABS: LegalTab[] = [
         heading: "Your rights",
         blocks: [
           p(
-            `Under UK GDPR you can ask for a copy of your data, ask us to correct it, ask us to delete it, or object to how we use it. Write to ${SUPPORT_EMAIL} and we will respond within one month.`,
+            `Under US state privacy laws — including the California Consumer Privacy Act (CCPA) as amended by the CPRA — you can ask for a copy of your data, ask us to correct it, ask us to delete it, and ask what we hold and who we share it with. Write to ${SUPPORT_EMAIL} and we will respond within 45 days.`,
           ),
           p(
             "You do not need to email us to delete: Settings has a one-tap delete that removes every row you own and ends your session straight away. It cannot be undone.",
           ),
           p(
-            "If you are unhappy with how we have handled your data you can complain to the Information Commissioner's Office at ico.org.uk.",
+            "We do not sell your personal information and we do not share it for cross-context behavioural advertising. If you are unhappy with how we have handled your data you can complain to your state's attorney general, or in California to the California Privacy Protection Agency.",
           ),
         ],
       },
@@ -190,12 +200,13 @@ export const LEGAL_TABS: LegalTab[] = [
     id: "contact",
     label: "Contact",
     title: "Contact us",
-    summary: "One address, one inbox, and what happens when the business incorporates.",
+    summary: "One address, one inbox, and the company that runs Freedom45.",
     sections: [
       {
-        heading: "Email",
+        heading: "Email and phone",
         blocks: [
           p(`Questions about the app, your data, or a payment: ${SUPPORT_EMAIL}.`),
+          p(`You can also call us on ${CONTACT_PHONE}.`),
           p("We aim to reply within a few working days."),
         ],
       },
@@ -204,10 +215,10 @@ export const LEGAL_TABS: LegalTab[] = [
         blocks: [p(CONTACT_ADDRESS)],
       },
       {
-        heading: "When we incorporate",
+        heading: "The company",
         blocks: [
           p(
-            "Freedom45 is a sole trader business today. On incorporation this page will be updated with the limited company's name, company number and registered office address, and the trading name line above will name the company instead. Nothing else on this page changes.",
+            `Freedom45 is a product of ${COMPANY_NAME}, ${COMPANY_TYPE}. The registered address is still to be supplied and is shown above as a marked placeholder.`,
           ),
         ],
       },
