@@ -21,6 +21,7 @@ import {
 } from "~/components/icons";
 import { age as fmtAge, money, shortDate } from "~/lib/format";
 import { project } from "~/lib/projection";
+import { spendingFromLogs } from "~/lib/scenario";
 import { dashboardFn, sessionUserFn, updateNumbersFn } from "~/server/actions";
 
 export const Route = createFileRoute("/dashboard")({
@@ -64,24 +65,15 @@ function Dashboard() {
   const numbersRef = useRef<HTMLDivElement | null>(null);
 
   /**
-   * The estimate moves with real logged spending.
-   *
-   * Month-to-date pence from the Spending Tracker is scaled to a full month, and
-   * the larger of that rate and the number stored on the profile is used — so one
-   * coffee logged on the 1st can never flatter the estimated freedom date. With
-   * nothing logged, the profile number is used unchanged. Nothing is hardcoded.
+   * The estimate moves with real logged spending. The rule lives in
+   * `spendingFromLogs` so Family Mode's Personal FI is the same number as this one.
    */
-  const now = new Date();
-  const daysElapsed = Math.max(1, now.getDate());
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const monthSpentPence = data?.monthSpentPence ?? 0;
   const spendCount = data?.spendCount ?? 0;
-  const rateFromLogs =
-    spendCount > 0 ? Math.round((monthSpentPence / daysElapsed) * daysInMonth) / 100 : 0;
-  const storedSpending = profile?.monthlySpending ?? 0;
-  const spending = rateFromLogs > 0 ? Math.max(rateFromLogs, storedSpending) : storedSpending;
-  const spendingBasis: "logs" | "profile" =
-    spendCount > 0 && rateFromLogs > storedSpending ? "logs" : "profile";
+  const { spending, basis: spendingBasis } = spendingFromLogs(
+    data?.monthSpentPence ?? 0,
+    spendCount,
+    profile?.monthlySpending ?? 0,
+  );
 
   // Commitments kept from the what-if sliders, stored on the profile.
   const extraSaving = profile?.extraMonthlySaving ?? 0;
