@@ -186,6 +186,117 @@ export function runScenario(
   };
 }
 
+/* ------------------------------------------------------------ spending basis */
+
+/**
+ * The spending figure the estimate is built on.
+ *
+ * Month-to-date pence from the Spending Tracker is scaled to a full month, and the
+ * larger of that rate and the number stored on the profile is used — so one coffee
+ * logged on the 1st can never flatter the estimated date. With nothing logged, the
+ * profile number is used unchanged. Shared by the dashboard and Family Mode so the
+ * Personal FI number is the same on both.
+ */
+export function spendingFromLogs(
+  monthSpentPence: number,
+  spendCount: number,
+  storedSpending: number,
+  now: Date = new Date(),
+): { spending: number; basis: "logs" | "profile" } {
+  const daysElapsed = Math.max(1, now.getDate());
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const rateFromLogs =
+    spendCount > 0 ? Math.round((monthSpentPence / daysElapsed) * daysInMonth) / 100 : 0;
+  return {
+    spending: rateFromLogs > 0 ? Math.max(rateFromLogs, storedSpending) : storedSpending,
+    basis: spendCount > 0 && rateFromLogs > storedSpending ? "logs" : "profile",
+  };
+}
+
+/* ---------------------------------------------------------------- family mode */
+
+/** The household a user describes on /family. Every money field is integer pence. */
+export type Household = {
+  partnerIncluded: boolean;
+  partnerIncomePence: number;
+  /** What the partner puts toward the household's monthly costs. */
+  partnerContributionPence: number;
+  partnerSavingsPence: number;
+  childrenCount: number;
+  /** Cost per child each month — TYPED IN by the user, never invented. */
+  childCostPence: number;
+};
+
+export const NO_HOUSEHOLD: Household = {
+  partnerIncluded: false,
+  partnerIncomePence: 0,
+  partnerContributionPence: 0,
+  partnerSavingsPence: 0,
+  childrenCount: 0,
+  childCostPence: 0,
+};
+
+/** What the server will accept for each Family Mode field. */
+export const FAMILY_CAPS = {
+  partnerIncomePence: 1_000_000, // £10,000 a month
+  partnerContributionPence: 1_000_000, // £10,000 a month
+  partnerSavingsPence: 10_000_000, // £100,000
+  childCostPence: 500_000, // £5,000 a month per child
+  childrenMax: 10,
+} as const;
+
+/** Whole number of children, 0…FAMILY_CAPS.childrenMax, never NaN. */
+export function toChildCount(value: unknown): number {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 0;
+  return Math.min(FAMILY_CAPS.childrenMax, Math.max(0, Math.round(parsed)));
+}
+
+/** True when the user has described a household worth pricing. */
+export function hasHousehold(household: Household): boolean {
+  return household.partnerIncluded || household.childrenCount > 0;
+}
+
+/**
+ * The household's position, derived from the user's own stored position.
+ *
+ * - Money in: the user's income plus the partner's income (and the extra saving the
+ *   user already committed, which `runScenario` adds).
+ * - Money out: the user's spending, less what the partner puts toward those costs
+ *   (so a shared cost is not counted twice), plus every child's typed monthly cost,
+ *   plus the existing family support.
+ * - Savings: the user's own balance plus the partner's.
+ *
+ * Nothing here is a claim about what a household or a child costs — every figure
+ * comes from something the user typed.
+ */
+export function householdBase(base: ScenarioBase, household: Household): ScenarioBase {
+  const partner = household.partnerIncluded;
+  const partnerIncomePence = partner ? household.partnerIncomePence : 0;
+  const partnerContributionPence = partner ? household.partnerContributionPence : 0;
+  const partnerSavingsPence = partner ? household.partnerSavingsPence : 0;
+  const childrenPence = household.childrenCount * household.childCostPence;
+  return {
+    ...base,
+    currentSavingsPence: base.currentSavingsPence + partnerSavingsPence,
+    monthlyIncomePence: base.monthlyIncomePence + partnerIncomePence,
+    monthlySpendingPence:
+      Math.max(0, base.monthlySpendingPence - partnerContributionPence) + childrenPence,
+  };
+}
+
+/**
+ * Years between Personal FI and Family FI, to one decimal. Negative means the
+ * household estimate lands sooner. Null when either date is not reached at all.
+ */
+export function familyGapYears(
+  personal: ScenarioNumbers,
+  family: ScenarioNumbers,
+): number | null {
+  if (personal.fiAge === null || family.fiAge === null) return null;
+  return Math.round((family.fiAge - personal.fiAge) * 10) / 10;
+}
+
 /* -------------------------------------------------------------- what-if deltas */
 
 /** How a scenario compares with the user's current position. Worked out on the server. */
