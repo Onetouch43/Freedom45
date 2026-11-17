@@ -99,7 +99,7 @@ export const LEGAL_TABS: LegalTab[] = [
         heading: "The paid plan",
         blocks: [
           p(
-            "The free tier covers the FI calculator, the Path to 45 projection and a basic spending tracker. The paid plan is £6 a month or £59 a year, in pounds sterling, and adds Family Mode, what-if scenarios, PDF export and the full investment library.",
+            "The free tier covers the FI calculator, the Path to 45 projection and a basic spending tracker. The paid plan is £6 a month or £59 a year, in pounds sterling, and adds Family Mode, what-if scenarios and the full investment library.",
           ),
           p(
             "You can cancel at any time and keep access until the end of the period you have paid for. We show you the price before any payment is taken.",
