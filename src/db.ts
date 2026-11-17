@@ -221,9 +221,14 @@ export const DDL: string[] = [
   // Family Mode. Kept ON THE PROFILE, like the kept sliders, so "delete everything"
   // already removes it with the profile row — no new table and no new delete path.
   // 0 / false means "not counted": nothing is ever invented from a blank field.
+  // partner_spending_monthly is what the PARTNER SPENDS each month and ADDS to the
+  // household's outgoings — it is never subtracted from yours. It replaced an
+  // earlier partner_contribution_monthly column whose meaning was wrong (it was
+  // subtracted, counting the partner's money twice); that column is dropped below.
   `alter table profiles add column if not exists partner_included boolean not null default false`,
   `alter table profiles add column if not exists partner_income_monthly numeric(12,2) not null default 0`,
-  `alter table profiles add column if not exists partner_contribution_monthly numeric(12,2) not null default 0`,
+  `alter table profiles add column if not exists partner_spending_monthly numeric(12,2) not null default 0`,
+  `alter table profiles drop column if exists partner_contribution_monthly`,
   `alter table profiles add column if not exists partner_savings numeric(12,2) not null default 0`,
   `alter table profiles add column if not exists children_count integer not null default 0`,
   `alter table profiles add column if not exists child_cost_monthly numeric(12,2) not null default 0`,

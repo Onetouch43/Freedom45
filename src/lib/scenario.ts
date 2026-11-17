@@ -219,8 +219,11 @@ export function spendingFromLogs(
 export type Household = {
   partnerIncluded: boolean;
   partnerIncomePence: number;
-  /** What the partner puts toward the household's monthly costs. */
-  partnerContributionPence: number;
+  /**
+   * What the partner spends on their own costs each month. This ADDS to the
+   * household's outgoings — it is never taken off yours.
+   */
+  partnerSpendingPence: number;
   partnerSavingsPence: number;
   childrenCount: number;
   /** Cost per child each month — TYPED IN by the user, never invented. */
@@ -230,7 +233,7 @@ export type Household = {
 export const NO_HOUSEHOLD: Household = {
   partnerIncluded: false,
   partnerIncomePence: 0,
-  partnerContributionPence: 0,
+  partnerSpendingPence: 0,
   partnerSavingsPence: 0,
   childrenCount: 0,
   childCostPence: 0,
@@ -239,7 +242,7 @@ export const NO_HOUSEHOLD: Household = {
 /** What the server will accept for each Family Mode field. */
 export const FAMILY_CAPS = {
   partnerIncomePence: 1_000_000, // £10,000 a month
-  partnerContributionPence: 1_000_000, // £10,000 a month
+  partnerSpendingPence: 1_000_000, // £10,000 a month
   partnerSavingsPence: 10_000_000, // £100,000
   childCostPence: 500_000, // £5,000 a month per child
   childrenMax: 10,
@@ -260,11 +263,14 @@ export function hasHousehold(household: Household): boolean {
 /**
  * The household's position, derived from the user's own stored position.
  *
+ * A household's outgoings do not shrink because one member pays part of them, so
+ * nothing the partner spends is ever taken off your figures:
+ *
  * - Money in: the user's income plus the partner's income (and the extra saving the
  *   user already committed, which `runScenario` adds).
- * - Money out: the user's spending, less what the partner puts toward those costs
- *   (so a shared cost is not counted twice), plus every child's typed monthly cost,
- *   plus the existing family support.
+ * - Money out: the user's spending PLUS the partner's own monthly spending, PLUS
+ *   every child's typed monthly cost, PLUS the existing family support (which
+ *   `runScenario` adds).
  * - Savings: the user's own balance plus the partner's.
  *
  * Nothing here is a claim about what a household or a child costs — every figure
@@ -273,15 +279,15 @@ export function hasHousehold(household: Household): boolean {
 export function householdBase(base: ScenarioBase, household: Household): ScenarioBase {
   const partner = household.partnerIncluded;
   const partnerIncomePence = partner ? household.partnerIncomePence : 0;
-  const partnerContributionPence = partner ? household.partnerContributionPence : 0;
+  const partnerSpendingPence = partner ? household.partnerSpendingPence : 0;
   const partnerSavingsPence = partner ? household.partnerSavingsPence : 0;
   const childrenPence = household.childrenCount * household.childCostPence;
   return {
     ...base,
     currentSavingsPence: base.currentSavingsPence + partnerSavingsPence,
     monthlyIncomePence: base.monthlyIncomePence + partnerIncomePence,
-    monthlySpendingPence:
-      Math.max(0, base.monthlySpendingPence - partnerContributionPence) + childrenPence,
+    // Added, never subtracted: the partner's own spending is real money going out.
+    monthlySpendingPence: base.monthlySpendingPence + partnerSpendingPence + childrenPence,
   };
 }
 

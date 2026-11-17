@@ -54,7 +54,7 @@ const inputClass =
 type Draft = {
   partnerIncluded: boolean;
   partnerIncome: number;
-  partnerContribution: number;
+  partnerSpending: number;
   partnerSavings: number;
   childrenCount: number;
   childCost: number;
@@ -78,7 +78,7 @@ function FamilyPage() {
   const [draft, setDraft] = useState<Draft>({
     partnerIncluded: household?.partnerIncluded ?? false,
     partnerIncome: toPounds(household?.partnerIncomePence ?? 0),
-    partnerContribution: toPounds(household?.partnerContributionPence ?? 0),
+    partnerSpending: toPounds(household?.partnerSpendingPence ?? 0),
     partnerSavings: toPounds(household?.partnerSavingsPence ?? 0),
     childrenCount: household?.childrenCount ?? 0,
     childCost: toPounds(household?.childCostPence ?? 0),
@@ -117,7 +117,7 @@ function FamilyPage() {
         data: {
           partnerIncluded: next.partnerIncluded,
           partnerIncomePence: toPence(next.partnerIncome),
-          partnerContributionPence: toPence(next.partnerContribution),
+          partnerSpendingPence: toPence(next.partnerSpending),
           partnerSavingsPence: toPence(next.partnerSavings),
           childrenCount: Math.round(next.childrenCount),
           childCostPence: toPence(next.childCost),
@@ -142,7 +142,7 @@ function FamilyPage() {
     const cleared: Draft = {
       partnerIncluded: false,
       partnerIncome: 0,
-      partnerContribution: 0,
+      partnerSpending: 0,
       partnerSavings: 0,
       childrenCount: 0,
       childCost: 0,
@@ -265,23 +265,25 @@ function FamilyPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="f-partner-contribution">
-                      What they put toward household costs each month
+                    <Label htmlFor="f-partner-spending">
+                      Your partner&apos;s own monthly spending
                     </Label>
                     <input
-                      id="f-partner-contribution"
+                      id="f-partner-spending"
                       type="number"
                       inputMode="numeric"
                       min={0}
-                      value={draft.partnerContribution}
+                      value={draft.partnerSpending}
                       onChange={(e) =>
-                        setDraft({ ...draft, partnerContribution: Number(e.target.value) })
+                        setDraft({ ...draft, partnerSpending: Number(e.target.value) })
                       }
                       className={inputClass}
                     />
                     <p className="mt-1 text-[11px] leading-relaxed text-faint">
-                      Taken off your monthly outgoings for the household estimate, so a shared cost
-                      isn&apos;t counted twice — it&apos;s already inside their income.
+                      What they spend on their own costs each month — their own bills, food,
+                      transport, anything they pay for. It is added to the household&apos;s
+                      outgoings, never taken off yours: a household&apos;s costs don&apos;t shrink
+                      because one person pays part of them.
                     </p>
                   </div>
                   <div>
@@ -398,8 +400,8 @@ function FamilyPage() {
             </li>
             <li>
               • <strong className="text-body">Family FI</strong> adds your partner&apos;s income and
-              savings, takes their contribution off your outgoings, and adds each child&apos;s cost
-              at the figure you typed. Nothing else changes.
+              savings, and adds their own monthly spending at the figure you typed, plus each
+              child&apos;s cost at the figure you typed. Nothing else changes.
             </li>
             <li>
               • Both use the same projection maths and the same {returnPct}% a year return
@@ -410,6 +412,14 @@ function FamilyPage() {
               age.
             </li>
           </ul>
+          <p className="mt-3 rounded-xl border border-line bg-page p-3 text-xs leading-relaxed text-body">
+            <strong className="font-semibold">How the household is added up:</strong> household
+            outgoings are your spending plus your partner&apos;s spending plus each child&apos;s
+            typed cost plus what you send to family; the household&apos;s income is both incomes,
+            and its savings are both balances. Nothing the partner spends is ever subtracted from
+            your costs — a household&apos;s outgoings don&apos;t shrink because one person pays part
+            of them.
+          </p>
           <p className="mt-3 text-xs leading-relaxed text-muted">
             These are illustrations built from your own assumptions. They are not a prediction, and
             they are not advice about whether to have a partner, children or anyone else in your

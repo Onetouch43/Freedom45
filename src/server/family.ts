@@ -48,7 +48,7 @@ type ProfileRow = {
   onboarded_at: unknown;
   partner_included: unknown;
   partner_income_monthly: unknown;
-  partner_contribution_monthly: unknown;
+  partner_spending_monthly: unknown;
   partner_savings: unknown;
   children_count: unknown;
   child_cost_monthly: unknown;
@@ -81,7 +81,7 @@ export type FamilyPageData =
 export type FamilySaveInput = {
   partnerIncluded?: boolean;
   partnerIncomePence?: number | string;
-  partnerContributionPence?: number | string;
+  partnerSpendingPence?: number | string;
   partnerSavingsPence?: number | string;
   childrenCount?: number | string;
   childCostPence?: number | string;
@@ -114,14 +114,14 @@ function failure(error: unknown): FamilyPageData {
 
 const PROFILE_COLUMNS = `monthly_income, monthly_spending, current_savings, extra_monthly_saving,
             family_support_monthly, current_age, target_freedom_age, currency, onboarded_at,
-            partner_included, partner_income_monthly, partner_contribution_monthly,
+            partner_included, partner_income_monthly, partner_spending_monthly,
             partner_savings, children_count, child_cost_monthly`;
 
 function householdFromRow(row: ProfileRow): Household & { familySupportPence: number } {
   return {
     partnerIncluded: row.partner_included === true || row.partner_included === "t",
     partnerIncomePence: Math.round(num(row.partner_income_monthly) * 100),
-    partnerContributionPence: Math.round(num(row.partner_contribution_monthly) * 100),
+    partnerSpendingPence: Math.round(num(row.partner_spending_monthly) * 100),
     partnerSavingsPence: Math.round(num(row.partner_savings) * 100),
     childrenCount: toChildCount(row.children_count),
     childCostPence: Math.round(num(row.child_cost_monthly) * 100),
@@ -134,9 +134,9 @@ function validateHousehold(data: FamilySaveInput | undefined): Household & { fam
   return {
     partnerIncluded: data?.partnerIncluded === true,
     partnerIncomePence: toSliderPence(data?.partnerIncomePence, FAMILY_CAPS.partnerIncomePence),
-    partnerContributionPence: toSliderPence(
-      data?.partnerContributionPence,
-      FAMILY_CAPS.partnerContributionPence,
+    partnerSpendingPence: toSliderPence(
+      data?.partnerSpendingPence,
+      FAMILY_CAPS.partnerSpendingPence,
     ),
     partnerSavingsPence: toSliderPence(data?.partnerSavingsPence, FAMILY_CAPS.partnerSavingsPence),
     childrenCount: toChildCount(data?.childrenCount),
@@ -257,7 +257,7 @@ export const saveFamilyFn = createServerFn({ method: "POST" })
         `update profiles
             set partner_included = $2,
                 partner_income_monthly = $3,
-                partner_contribution_monthly = $4,
+                partner_spending_monthly = $4,
                 partner_savings = $5,
                 children_count = $6,
                 child_cost_monthly = $7,
@@ -269,7 +269,7 @@ export const saveFamilyFn = createServerFn({ method: "POST" })
           user.id,
           household.partnerIncluded,
           household.partnerIncomePence / 100,
-          household.partnerContributionPence / 100,
+          household.partnerSpendingPence / 100,
           household.partnerSavingsPence / 100,
           household.childrenCount,
           household.childCostPence / 100,
