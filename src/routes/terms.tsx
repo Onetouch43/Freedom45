@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "~/components/Header";
-import { Bullets, LegalPage, Placeholder, Section } from "~/components/Footer";
+import { Bullets, LegalPage, Section } from "~/components/Footer";
 import {
   COMPANY_NAME,
   COMPANY_TYPE,
   CONTACT_EMAIL,
   CONTACT_PHONE,
-  GOVERNING_STATE_PLACEHOLDER,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  GOVERNING_LAW,
+  REGISTERED_ADDRESS,
 } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
@@ -49,7 +49,7 @@ function TermsPage() {
         <Section heading="1. Who we are and what this service is">
           <p>
             Freedom45 is provided by {COMPANY_NAME}, {COMPANY_TYPE}, of{" "}
-            <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder> ("we", "us"). You can reach
+            {REGISTERED_ADDRESS} ("we", "us"). You can reach
             us at{" "}
             <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
               {CONTACT_EMAIL}
@@ -176,18 +176,16 @@ function TermsPage() {
           </p>
           <p>
             Nothing in these terms limits or excludes any liability that cannot be limited or
-            excluded under the law of the State of{" "}
-            <Placeholder>{GOVERNING_STATE_PLACEHOLDER}</Placeholder>, United States — including
-            liability for death or personal injury caused by negligence, or for fraud.
+            excluded under the law of {GOVERNING_LAW} — including liability for death or personal
+            injury caused by negligence, or for fraud.
           </p>
         </Section>
 
         <Section heading="11. Governing law">
           <p>
-            These terms are governed by the laws of the State of{" "}
-            <Placeholder>{GOVERNING_STATE_PLACEHOLDER}</Placeholder>, United States, without regard
-            to its conflict-of-law rules, and the state and federal courts located there have
-            exclusive jurisdiction over any dispute about them.
+            These terms are governed by the laws of {GOVERNING_LAW}, without regard to its
+            conflict-of-law rules, and the state and federal courts located there have exclusive
+            jurisdiction over any dispute about them.
           </p>
         </Section>
 

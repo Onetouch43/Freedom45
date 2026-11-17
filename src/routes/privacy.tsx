@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "~/components/Header";
-import { Bullets, LegalPage, Placeholder, Section } from "~/components/Footer";
+import { Bullets, LegalPage, Section } from "~/components/Footer";
 import {
   COMPANY_NAME,
   COMPANY_TYPE,
   CONTACT_EMAIL,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  REGISTERED_ADDRESS,
 } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
@@ -48,7 +48,7 @@ function PrivacyPage() {
         <Section heading="Who is responsible">
           <p>
             Freedom45 is a product of {COMPANY_NAME}, {COMPANY_TYPE}, of{" "}
-            <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder>. We are the data controller
+            {REGISTERED_ADDRESS}. We are the data controller
             for the information described here. Privacy questions and requests:{" "}
             <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
               {CONTACT_EMAIL}
@@ -152,8 +152,8 @@ function PrivacyPage() {
 
         <Section heading="Your rights">
           <p>
-            Under US state privacy laws — including the California Consumer Privacy Act (CCPA) as
-            amended by the CPRA, and similar laws in other states — you can ask us to:
+            Wherever you live, you can ask us to do any of these — this is our promise to everyone,
+            and it does not depend on where you live:
           </p>
           <Bullets
             items={[
@@ -164,6 +164,14 @@ function PrivacyPage() {
               "give you your data in a portable format.",
             ]}
           />
+          <p>
+            If you live in California, the California Consumer Privacy Act (CCPA) as amended by the
+            CPRA gives you these same rights in state law, and we honour them for California
+            residents. That law follows where you live, not where our company is formed: we are
+            formed in Pennsylvania, which has no comprehensive consumer-privacy statute of its own,
+            so nothing here rests on Pennsylvania law protecting you — it rests on the promises
+            above and on the law of the state you live in.
+          </p>
           <p>
             You do not need to email us to delete your data: open{" "}
             <a className="underline underline-offset-2" href="/settings">Settings</a> and tap{" "}

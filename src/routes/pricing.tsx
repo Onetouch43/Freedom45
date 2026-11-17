@@ -9,7 +9,7 @@ import {
   COMPANY_NAME,
   CONTACT_EMAIL,
   CONTACT_PHONE,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  REGISTERED_ADDRESS,
 } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 import { createCheckoutSessionFn } from "~/server/stripe";
@@ -203,10 +203,7 @@ function PricingPage() {
         <Disclaimer className="mt-4" />
 
         <p className="mt-4 text-xs leading-relaxed text-faint">
-          {COMPANY_NAME} · {CONTACT_EMAIL} · {CONTACT_PHONE} ·{" "}
-          <span className="rounded bg-warn-fill/25 px-1 font-semibold text-warn">
-            [{REGISTERED_ADDRESS_PLACEHOLDER}]
-          </span>
+          {COMPANY_NAME} · {CONTACT_EMAIL} · {CONTACT_PHONE} · {REGISTERED_ADDRESS}
         </p>
       </main>
       <Footer signedIn={signedIn} />
