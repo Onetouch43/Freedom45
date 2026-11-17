@@ -111,7 +111,7 @@ function TermsPage() {
           </p>
           <p>
             The paid tier is <strong>£6 per month or £59 per year</strong>, and includes Family Mode,
-            scenarios and what-if sliders, PDF export, the full investment library and no ads. The
+            scenarios and what-if sliders, the full investment library and no ads. The
             price and what it includes are shown on the{" "}
             <a className="underline underline-offset-2" href="/pricing">pricing page</a> before you
             pay.

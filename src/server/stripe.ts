@@ -24,11 +24,24 @@ const STRIPE_API = "https://api.stripe.com/v1";
 
 /** Test-mode price IDs. Server-side constants; they are not secret. */
 export const PRICE_IDS = {
-  monthly: "price_1Ua4fTGTV18WfpS7MA52IOEv",
-  yearly: "price_1Ua4kgGTV18WlpS7ZE7U9Jlo",
+  monthly: "price_1Ua4fTGTV18WfpS7MA52lOEv",
+  yearly: "price_1Ua4kgGTV18WfpS7ZE7U9Jlo",
 } as const;
 
 export type PlanId = keyof typeof PRICE_IDS;
+
+/**
+ * Startup-safe guard: resolves the price ID for a plan and refuses anything
+ * that is not a well-formed Stripe price ID (`price_` plus letters/digits).
+ * A mistyped, missing or empty constant therefore returns null and the caller
+ * shows the honest "payments aren't switched on" message — never a crash, and
+ * never a request to Stripe with a bogus ID.
+ */
+function priceIdFor(plan: PlanId): string | null {
+  const id = (PRICE_IDS as Record<string, string | undefined>)[plan];
+  if (typeof id !== "string") return null;
+  return /^price_[A-Za-z0-9]{1,255}$/.test(id.trim()) ? id.trim() : null;
+}
 
 /** The only thing a user is ever told when checkout cannot start. */
 export const PAYMENTS_OFF_MESSAGE =
@@ -61,12 +74,20 @@ function isLoopback(host: string): boolean {
 }
 
 /**
- * The origin to send Stripe back to, taken from the incoming request rather than
- * a hardcoded host. The site sits behind a proxy that can mask the host as
- * localhost, and a Checkout session must never point at loopback — so a
- * loopback host falls back to the app's published URL.
+ * The origin to send Stripe back to. This must be an address the payer can
+ * actually open, so it is the app's published URL. The site sits behind a proxy
+ * that rewrites the host header to an internal name (and can mask it as
+ * localhost), so a request-derived host is only trusted when it is the published
+ * host itself; anything else — internal name, loopback, missing — falls back to
+ * the published URL.
  */
 function requestOrigin(): string {
+  let publishedHost = "";
+  try {
+    publishedHost = new URL(APP_URL).host.toLowerCase();
+  } catch {
+    publishedHost = "";
+  }
   try {
     const request = getRequest();
     const url = new URL(request.url);
@@ -77,7 +98,14 @@ function requestOrigin(): string {
       forwardedProto === "https" || forwardedProto === "http"
         ? forwardedProto
         : url.protocol.replace(":", "");
-    if (host && !isLoopback(host)) return `${proto}://${host}`;
+    if (
+      publishedHost &&
+      host &&
+      !isLoopback(host) &&
+      host.toLowerCase() === publishedHost
+    ) {
+      return `${proto}://${host}`;
+    }
   } catch {
     // No request in scope — use the published URL below.
   }
@@ -112,6 +140,9 @@ export const createCheckoutSessionFn = createServerFn({ method: "POST" })
     const key = secretKey();
     if (!key) return { ok: false, message: PAYMENTS_OFF_MESSAGE };
 
+    const priceId = priceIdFor(plan);
+    if (!priceId) return { ok: false, message: PAYMENTS_OFF_MESSAGE };
+
     const origin = requestOrigin();
     // Pre-fill the email only when someone is signed in. No Stripe customer
     // record is created — Checkout makes one itself when the payment completes.
@@ -126,7 +157,7 @@ export const createCheckoutSessionFn = createServerFn({ method: "POST" })
         },
         body: formBody({
           mode: "subscription",
-          "line_items[0][price]": PRICE_IDS[plan],
+          "line_items[0][price]": priceId,
           "line_items[0][quantity]": "1",
           success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${origin}/pricing`,
