@@ -106,13 +106,13 @@ function TermsPage() {
         <Section heading="5. Free tier and paid tier">
           <p>
             The free tier includes the financial-independence calculator, your Path to 45
-            projection, and a basic tracker, with no ads. It is free and you can use it without
-            entering any payment details.
+            projection, a basic tracker and the full investment library, with no ads. It is free
+            and you can use it without entering any payment details.
           </p>
           <p>
             The paid tier is <strong>£6 per month or £59 per year</strong>, and includes Family Mode,
-            scenarios and what-if sliders, the full investment library and no ads. The
-            price and what it includes are shown on the{" "}
+            scenarios and what-if sliders, and no ads. The investment library stays free on both
+            tiers. The price and what it includes are shown on the{" "}
             <a className="underline underline-offset-2" href="/pricing">pricing page</a> before you
             pay.
           </p>

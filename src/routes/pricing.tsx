@@ -12,6 +12,7 @@ import {
   REGISTERED_ADDRESS,
 } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
+import { entitlementFn, restorePurchaseFn } from "~/server/entitlement";
 import { createCheckoutSessionFn } from "~/server/stripe";
 
 /** Shown when checkout cannot start — the server sends the same wording. */
@@ -24,22 +25,30 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Freedom45 is free for the FI calculator, your Path to 45 projection and a basic tracker. The paid plan is £6 a month or £59 a year and adds Family Mode, what-if scenarios and the full investment library.",
+          "Freedom45 is free for the FI calculator, your Path to 45 projection, a basic tracker and the whole investment library. The paid plan is £6 a month or £59 a year and adds Family Mode, what-if scenarios and no ads.",
       },
     ],
   }),
   beforeLoad: async () => {
-    const { user } = await sessionUserFn().catch(() => ({ user: null }));
-    return { signedIn: Boolean(user) };
+    const [{ user }, entitlement] = await Promise.all([
+      sessionUserFn().catch(() => ({ user: null })),
+      entitlementFn().catch(() => null),
+    ]);
+    return {
+      signedIn: Boolean(user),
+      paid: Boolean(entitlement?.paid),
+      paidUntil: entitlement?.paidUntil ?? null,
+    };
   },
   component: PricingPage,
 });
 
 /** What the paid tier adds. Same list the business plan sets out. */
+// The investment library is deliberately NOT on this list: it is free for everyone
+// at launch (best thing on the site, first impressions, search traffic).
 const PAID_FEATURES = [
   "Family Mode — a spouse, children and parents, with Personal FI and Family FI side by side",
   "Scenarios and what-if sliders you can keep",
-  "The full investment library",
   "No ads",
 ];
 
@@ -47,13 +56,40 @@ const FREE_FEATURES = [
   "The FI calculator",
   "Your Path to 45 projection and weekly check-in",
   "A basic spending tracker with alerts",
+  "The full investment library — free for everyone",
 ];
 
+/** A plain date for the "your plan is on until…" line. Never a countdown. */
+function formatDay(value: string): string {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "the end of the paid period";
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+}
+
 function PricingPage() {
-  const { signedIn } = Route.useRouteContext();
+  const { signedIn, paid, paidUntil } = Route.useRouteContext();
   const startCheckout = useServerFn(createCheckoutSessionFn);
+  const restore = useServerFn(restorePurchaseFn);
   const [busy, setBusy] = useState<"monthly" | "yearly" | null>(null);
   const [message, setMessage] = useState("");
+  const [restoring, setRestoring] = useState(false);
+  const [restoreNote, setRestoreNote] = useState("");
+  const [restoredPaid, setRestoredPaid] = useState(paid);
+
+  /** The safety net: paid in Stripe but never got back to /success. */
+  async function restorePurchase() {
+    setRestoring(true);
+    setRestoreNote("");
+    try {
+      const result = await restore({});
+      setRestoreNote(result.message);
+      if (result.paid) setRestoredPaid(true);
+    } catch {
+      setRestoreNote("Couldn't check just now. Please try again in a moment.");
+    } finally {
+      setRestoring(false);
+    }
+  }
 
   async function choose(plan: "monthly" | "yearly") {
     setBusy(plan);
@@ -176,11 +212,58 @@ function PricingPage() {
         </div>
 
         <Card className="mt-4">
+          <h2 className="text-base font-semibold text-body">
+            {restoredPaid ? "Your paid plan is on" : "Already paid?"}
+          </h2>
+          {restoredPaid ? (
+            <p className="mt-2 text-sm leading-relaxed text-body">
+              The paid tools — Family Mode and the what-if sliders — are switched on for this
+              account
+              {paidUntil ? ` until ${formatDay(paidUntil)}` : ""}. Nothing else to do.
+            </p>
+          ) : (
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              If you paid and closed the tab before the confirmation page, or you are not sure
+              whether the plan reached this account, press the button below. It looks up a live
+              subscription in Stripe under the email you are signed in with and switches the paid
+              tools on. It never takes a payment.
+            </p>
+          )}
+          {restoreNote ? (
+            <p
+              role="status"
+              className="mt-3 rounded-xl border border-line bg-surface-2 p-3 text-sm leading-relaxed text-body"
+            >
+              {restoreNote}
+            </p>
+          ) : null}
+          {signedIn && !restoredPaid ? (
+            <Button
+              type="button"
+              variant="light"
+              className="mt-3 w-full"
+              disabled={restoring}
+              onClick={() => void restorePurchase()}
+            >
+              {restoring ? "Checking Stripe…" : "Restore my purchase"}
+            </Button>
+          ) : null}
+          {!signedIn ? (
+            <Link
+              to="/login"
+              className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-line bg-surface-2 px-4 text-base font-semibold text-body transition-colors hover:border-line-strong hover:bg-surface"
+            >
+              Sign in to restore a purchase
+            </Link>
+          ) : null}
+        </Card>
+
+        <Card className="mt-4">
           <h2 className="text-base font-semibold text-body">What paying does and does not buy</h2>
           <ul className="mt-2 space-y-2 text-sm leading-relaxed text-body">
             <li>
-              You pay for the app's tools — the household plan, the scenarios and the investment
-              library. That is software, not a service.
+              You pay for the app's tools — the household plan and the scenarios. That is
+              software, not a service. The investment library is free whether you pay or not.
             </li>
             <li>
               <strong>Paying does not buy financial advice.</strong> Nothing in Freedom45 is
