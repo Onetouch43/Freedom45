@@ -9,7 +9,7 @@ import {
   COMPANY_NAME,
   CONTACT_EMAIL,
   CONTACT_PHONE,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  REGISTERED_ADDRESS,
 } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 import { createCheckoutSessionFn } from "~/server/stripe";
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Freedom45 is free for the FI calculator, your Path to 45 projection and a basic tracker. The paid plan is £6 a month or £59 a year and adds Family Mode, what-if scenarios, PDF export and the full investment library.",
+          "Freedom45 is free for the FI calculator, your Path to 45 projection and a basic tracker. The paid plan is £6 a month or £59 a year and adds Family Mode, what-if scenarios and the full investment library.",
       },
     ],
   }),
@@ -39,7 +39,6 @@ export const Route = createFileRoute("/pricing")({
 const PAID_FEATURES = [
   "Family Mode — a spouse, children and parents, with Personal FI and Family FI side by side",
   "Scenarios and what-if sliders you can keep",
-  "PDF export of your plan",
   "The full investment library",
   "No ads",
 ];
@@ -180,8 +179,8 @@ function PricingPage() {
           <h2 className="text-base font-semibold text-body">What paying does and does not buy</h2>
           <ul className="mt-2 space-y-2 text-sm leading-relaxed text-body">
             <li>
-              You pay for the app's tools — the household plan, the scenarios, the export and the
-              investment library. That is software, not a service.
+              You pay for the app's tools — the household plan, the scenarios and the investment
+              library. That is software, not a service.
             </li>
             <li>
               <strong>Paying does not buy financial advice.</strong> Nothing in Freedom45 is
@@ -203,10 +202,7 @@ function PricingPage() {
         <Disclaimer className="mt-4" />
 
         <p className="mt-4 text-xs leading-relaxed text-faint">
-          {COMPANY_NAME} · {CONTACT_EMAIL} · {CONTACT_PHONE} ·{" "}
-          <span className="rounded bg-warn-fill/25 px-1 font-semibold text-warn">
-            [{REGISTERED_ADDRESS_PLACEHOLDER}]
-          </span>
+          {COMPANY_NAME} · {CONTACT_EMAIL} · {CONTACT_PHONE} · {REGISTERED_ADDRESS}
         </p>
       </main>
       <Footer signedIn={signedIn} />

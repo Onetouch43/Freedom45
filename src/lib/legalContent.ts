@@ -5,10 +5,9 @@
  * can be word-counted from a script (the legal posture caps each tab at 400 words)
  * and edited without touching any layout code.
  *
- * THE COMPANY DETAILS ARE REAL except the registered address and the governing
- * state, which the owner has not supplied. Those two stay marked placeholders —
- * we must not invent them. The square brackets are part of the text, so the page
- * highlights them as-is.
+ * THE COMPANY DETAILS ARE REAL, including the owner-supplied registered address
+ * and the law that governs the terms: the Commonwealth of Pennsylvania, United
+ * States. Nothing here is a placeholder for a detail we do not have.
  */
 
 import {
@@ -16,8 +15,8 @@ import {
   COMPANY_TYPE,
   CONTACT_EMAIL,
   CONTACT_PHONE,
-  GOVERNING_STATE_PLACEHOLDER,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  GOVERNING_LAW,
+  REGISTERED_ADDRESS,
 } from "./company";
 
 /** Business line, rendered at the top of /legal so every tab sits under it. */
@@ -26,15 +25,15 @@ export const SOLE_TRADER_LINE = `Freedom45 is a trading name of ${COMPANY_NAME}`
 /** Where users write to us. Appears wherever we ask someone to contact us. */
 export const SUPPORT_EMAIL = CONTACT_EMAIL;
 
-/** Postal contact. The owner still has to supply the registered address. */
-export const CONTACT_ADDRESS = `Registered address: [${REGISTERED_ADDRESS_PLACEHOLDER}]`;
+/** Postal contact — the owner-supplied registered address. */
+export const CONTACT_ADDRESS = `Registered address: ${REGISTERED_ADDRESS}`;
 
 /** Shown as a visible "Effective date" line. */
 export const EFFECTIVE_DATE = "9 November 2026";
 
 /** The draft banner, word for word. */
 export const DRAFT_BANNER =
-  "Pre-launch draft - registered address and governing state to be provided before taking payments on a custom domain";
+  "Pre-launch draft - final legal review before launch on a custom domain";
 
 export type LegalBlock =
   | { kind: "p"; text: string }
@@ -99,7 +98,7 @@ export const LEGAL_TABS: LegalTab[] = [
         heading: "The paid plan",
         blocks: [
           p(
-            "The free tier covers the FI calculator, the Path to 45 projection and a basic spending tracker. The paid plan is £6 a month or £59 a year, in pounds sterling, and adds Family Mode, what-if scenarios, PDF export and the full investment library.",
+            "The free tier covers the FI calculator, the Path to 45 projection and a basic spending tracker. The paid plan is £6 a month or £59 a year, in pounds sterling, and adds Family Mode, what-if scenarios and the full investment library.",
           ),
           p(
             "You can cancel at any time and keep access until the end of the period you have paid for. We show you the price before any payment is taken.",
@@ -121,9 +120,9 @@ export const LEGAL_TABS: LegalTab[] = [
             "We may update these terms. The effective date above shows which version is current; if you keep using Freedom45, the new version applies.",
           ),
           p(
-            "These terms are governed by the laws of the State of [" +
-              GOVERNING_STATE_PLACEHOLDER +
-              "], United States, and any dispute will be dealt with by the state or federal courts located there.",
+            "These terms are governed by the laws of " +
+              GOVERNING_LAW +
+              ", and any dispute will be dealt with by the state or federal courts located there.",
           ),
         ],
       },
@@ -134,7 +133,7 @@ export const LEGAL_TABS: LegalTab[] = [
     label: "Privacy",
     title: "Privacy notice",
     summary:
-      "What we hold, where it lives, and how to get it back or delete it — under US state privacy law.",
+      "What we hold, where it lives, and how to get it back or delete it — and the promise that we never sell it.",
     sections: [
       {
         heading: "Who is responsible",
@@ -176,7 +175,10 @@ export const LEGAL_TABS: LegalTab[] = [
         heading: "Your rights",
         blocks: [
           p(
-            `Under US state privacy laws — including the California Consumer Privacy Act (CCPA) as amended by the CPRA — you can ask for a copy of your data, ask us to correct it, ask us to delete it, and ask what we hold and who we share it with. Write to ${SUPPORT_EMAIL} and we will respond within 45 days.`,
+            `Whoever you are and wherever you live, you can ask for a copy of your data, ask us to correct it, ask us to delete it, and ask what we hold and who we share it with. Write to ${SUPPORT_EMAIL} and we will respond within 45 days. Those are our own promises, made to everyone — they do not depend on where you live.`,
+          ),
+          p(
+            "If you live in California, the California Consumer Privacy Act (CCPA) as amended by the CPRA also gives you these rights under state law, and we honour them for California residents: to know what we hold, to delete it, to correct it, to take a copy with you, and not to be treated differently for asking. That law applies to you because you live in California, not because of where our company is formed — Pennsylvania, where we are formed, has no comprehensive consumer-privacy statute of its own, so this notice rests on our promises and on the law of the state you live in, not on Pennsylvania law protecting you.",
           ),
           p(
             "You do not need to email us to delete: Settings has a one-tap delete that removes every row you own and ends your session straight away. It cannot be undone.",
@@ -218,7 +220,7 @@ export const LEGAL_TABS: LegalTab[] = [
         heading: "The company",
         blocks: [
           p(
-            `Freedom45 is a product of ${COMPANY_NAME}, ${COMPANY_TYPE}. The registered address is still to be supplied and is shown above as a marked placeholder.`,
+            `Freedom45 is a product of ${COMPANY_NAME}, ${COMPANY_TYPE}, formed in the Commonwealth of Pennsylvania, United States. The registered address is ${REGISTERED_ADDRESS}.`,
           ),
         ],
       },

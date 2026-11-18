@@ -6,7 +6,7 @@ import {
   COMPANY_TYPE,
   CONTACT_EMAIL,
   CONTACT_PHONE,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  REGISTERED_ADDRESS,
 } from "~/lib/company";
 
 /**
@@ -58,7 +58,7 @@ export function Footer({ signedIn = false }: { signedIn?: boolean }) {
         </p>
         <p className="mt-2 text-xs leading-relaxed text-muted">
           Freedom45 is a product of {COMPANY_NAME}, {COMPANY_TYPE}. Registered address:{" "}
-          <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder>
+          {REGISTERED_ADDRESS}.
         </p>
         <p className="mt-1 text-xs leading-relaxed text-muted">
           <a className="underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
@@ -130,19 +130,6 @@ export function Bullets({ items }: { items: ReactNode[] }) {
         <li key={index}>{item}</li>
       ))}
     </ul>
-  );
-}
-
-/**
- * A detail we do not have yet. Deliberately loud so nobody mistakes it for real
- * text: the only company detail still missing is the registered address, and
- * these strings get replaced the day the owner supplies it.
- */
-export function Placeholder({ children }: { children: ReactNode }) {
-  return (
-    <mark className="rounded bg-warn-fill/25 px-1 font-semibold text-warn">
-      [{children}]
-    </mark>
   );
 }
 

@@ -1,10 +1,9 @@
 /**
  * The business's real details, in one place.
  *
- * Owner-supplied: name, company type, contact email and phone. The registered
- * address has NOT been supplied, so it stays a visible placeholder everywhere an
- * address is required — we do not invent one. The governing state is the same:
- * a marked placeholder until the owner names it.
+ * Every detail below is owner-supplied: name, company type, contact email and
+ * phone, registered address, and the jurisdiction whose law governs the terms.
+ * Nothing here is a placeholder any more — there is nothing left to invent.
  *
  * WHAT MUST NEVER APPEAR HERE: the company's EIN. It is for Stripe and tax only
  * and must not be written into the app, its content, its comments or its tests.
@@ -20,8 +19,20 @@ export const CONTACT_EMAIL = "info@futuresaiglobal.com";
 /** Owner-supplied contact number, in international format. */
 export const CONTACT_PHONE = "+1 (267) 242-7615";
 
-/** Not supplied yet — rendered inside <Placeholder> so it is obviously missing. */
-export const REGISTERED_ADDRESS_PLACEHOLDER = "Registered address to be provided";
+/** The owner-supplied registered address, formatted for the US. */
+export const REGISTERED_ADDRESS = "2472 Cornwall Road, Chambersburg, PA 17202, USA";
 
-/** Not supplied yet — the US state whose law governs the terms. */
-export const GOVERNING_STATE_PLACEHOLDER = "STATE TO BE CONFIRMED";
+/** The same address as lines, for the places that print it as a block. */
+export const REGISTERED_ADDRESS_LINES = [
+  "2472 Cornwall Road",
+  "Chambersburg, PA 17202",
+  "USA",
+] as const;
+
+/**
+ * Owner-supplied: the LLC is formed in Pennsylvania, and the law of that
+ * Commonwealth governs the terms. Pennsylvania is a Commonwealth, not a State,
+ * and it has no comprehensive consumer-privacy statute — so the privacy notice
+ * rests on our own promises, not on Pennsylvania law protecting you.
+ */
+export const GOVERNING_LAW = "the Commonwealth of Pennsylvania, United States";

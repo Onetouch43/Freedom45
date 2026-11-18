@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "~/components/Header";
-import { Bullets, LegalPage, Placeholder, Section } from "~/components/Footer";
+import { Bullets, LegalPage, Section } from "~/components/Footer";
 import {
   COMPANY_NAME,
   COMPANY_TYPE,
   CONTACT_EMAIL,
   CONTACT_PHONE,
-  REGISTERED_ADDRESS_PLACEHOLDER,
+  REGISTERED_ADDRESS,
 } from "~/lib/company";
 import { sessionUserFn } from "~/server/actions";
 
@@ -108,8 +108,7 @@ function AboutPage() {
             or {CONTACT_PHONE}.
           </p>
           <p>
-            {COMPANY_NAME}, {COMPANY_TYPE}. Registered address:{" "}
-            <Placeholder>{REGISTERED_ADDRESS_PLACEHOLDER}</Placeholder>.
+            {COMPANY_NAME}, {COMPANY_TYPE}. Registered address: {REGISTERED_ADDRESS}.
           </p>
           <p className="text-sm text-muted">
             Freedom45 provides educational estimates only — see the{" "}

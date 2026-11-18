@@ -43,7 +43,6 @@ export const Route = createFileRoute("/success")({
 const PAID_FEATURES = [
   "Family Mode — Personal FI and Family FI side by side",
   "Scenarios and what-if sliders you can keep",
-  "PDF export of your plan",
   "The full investment library",
   "No ads",
 ];
