@@ -175,6 +175,7 @@ export const TABLES = [
   "spending_logs",
   "side_hustle_selections",
   "snapshots",
+  "password_resets",
 ] as const;
 
 /**
@@ -292,6 +293,19 @@ export const DDL: string[] = [
      created_at timestamptz not null default now()
    )`,
   `create index if not exists snapshots_user_created_idx on snapshots (user_id, created_at desc)`,
+
+  // Password reset. Only the SHA-256 of a token is stored — never the token
+  // itself — and a row is single-use (`used_at`) and expires. Rows hang off the
+  // user row with ON DELETE CASCADE, so "delete my data" already removes them.
+  `create table if not exists password_resets (
+     id serial primary key,
+     user_id integer not null references users(id) on delete cascade,
+     token_hash text not null unique,
+     expires_at timestamptz not null,
+     used_at timestamptz,
+     created_at timestamptz not null default now()
+   )`,
+  `create index if not exists password_resets_user_idx on password_resets (user_id)`,
 ];
 
 export type MigrationResult = { ok: true; tables: string[] };

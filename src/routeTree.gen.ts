@@ -15,6 +15,7 @@ import { Route as SpendingRouteImport } from './routes/spending'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SideHustlesRouteImport } from './routes/side-hustles'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
@@ -22,6 +23,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as InvestmentsRouteImport } from './routes/investments'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FamilyRouteImport } from './routes/family'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -59,6 +61,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -92,6 +99,11 @@ const InvestmentsRoute = InvestmentsRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FamilyRoute = FamilyRouteImport.update({
@@ -131,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
   '/family': typeof FamilyRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
   '/investments': typeof InvestmentsRoute
   '/legal': typeof LegalRoute
@@ -138,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
@@ -152,6 +166,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
   '/family': typeof FamilyRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
   '/investments': typeof InvestmentsRoute
   '/legal': typeof LegalRoute
@@ -159,6 +174,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
@@ -174,6 +190,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
   '/family': typeof FamilyRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
   '/investments': typeof InvestmentsRoute
   '/legal': typeof LegalRoute
@@ -181,6 +198,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/side-hustles': typeof SideHustlesRoute
   '/signup': typeof SignupRoute
@@ -197,6 +215,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/disclaimer'
     | '/family'
+    | '/forgot-password'
     | '/guide'
     | '/investments'
     | '/legal'
@@ -204,6 +223,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pricing'
     | '/privacy'
+    | '/reset-password'
     | '/settings'
     | '/side-hustles'
     | '/signup'
@@ -218,6 +238,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/disclaimer'
     | '/family'
+    | '/forgot-password'
     | '/guide'
     | '/investments'
     | '/legal'
@@ -225,6 +246,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pricing'
     | '/privacy'
+    | '/reset-password'
     | '/settings'
     | '/side-hustles'
     | '/signup'
@@ -239,6 +261,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/disclaimer'
     | '/family'
+    | '/forgot-password'
     | '/guide'
     | '/investments'
     | '/legal'
@@ -246,6 +269,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pricing'
     | '/privacy'
+    | '/reset-password'
     | '/settings'
     | '/side-hustles'
     | '/signup'
@@ -261,6 +285,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   DisclaimerRoute: typeof DisclaimerRoute
   FamilyRoute: typeof FamilyRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   GuideRoute: typeof GuideRoute
   InvestmentsRoute: typeof InvestmentsRoute
   LegalRoute: typeof LegalRoute
@@ -268,6 +293,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
   SideHustlesRoute: typeof SideHustlesRoute
   SignupRoute: typeof SignupRoute
@@ -321,6 +347,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -368,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/family': {
@@ -421,6 +461,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   DisclaimerRoute: DisclaimerRoute,
   FamilyRoute: FamilyRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   GuideRoute: GuideRoute,
   InvestmentsRoute: InvestmentsRoute,
   LegalRoute: LegalRoute,
@@ -428,6 +469,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
   SideHustlesRoute: SideHustlesRoute,
   SignupRoute: SignupRoute,
