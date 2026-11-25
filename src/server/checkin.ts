@@ -16,6 +16,7 @@ import {
   type Sliders,
 } from "~/lib/scenario";
 import { getSessionUser, type SessionUser } from "./auth";
+import { PAID_REQUIRED_MESSAGE, isPaidUser } from "./entitlement";
 
 /**
  * Weekly check-in + what-if sliders — the server layer.
@@ -237,6 +238,11 @@ export const scenarioPreviewFn = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<PreviewResult> => {
     const user = await requireUser();
     if (!user) return { ok: false, reason: "signed-out", message: "Please log in again." };
+    // THE GATE, server-side: the what-if sliders are a paid tool. A free account
+    // is refused here even if it calls this function directly.
+    if (!(await isPaidUser(user.id))) {
+      return { ok: false, reason: "paid-required", message: PAID_REQUIRED_MESSAGE };
+    }
     const sliders = validateSliders(data);
     const rate = toReturnPct(data?.annualReturnPct ?? RETURN_DEFAULT);
     try {
@@ -273,6 +279,10 @@ export const applyScenarioFn = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<ApplyResult> => {
     const user = await requireUser();
     if (!user) return { ok: false, reason: "signed-out", message: "Please log in again." };
+    // The gate again, on the write path: a free account cannot keep a scenario.
+    if (!(await isPaidUser(user.id))) {
+      return { ok: false, reason: "paid-required", message: PAID_REQUIRED_MESSAGE };
+    }
     const sliders = validateSliders(data);
     try {
       await ensureSchema();

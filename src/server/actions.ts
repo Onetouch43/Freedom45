@@ -19,6 +19,7 @@ import {
   verifyPassword,
   type SessionUser,
 } from "./auth";
+import { entitlementFor } from "./entitlement";
 
 /* ------------------------------------------------------------------- types */
 
@@ -77,6 +78,8 @@ export type DashboardData = {
   spendCount: number;
   /** The weekly check-in card: suggestion, state, and the server's current estimate. */
   checkIn: (CheckInState & { estimate: ScenarioNumbers }) | null;
+  /** True when `profiles.paid_until` is in the future — the what-if sliders open. */
+  paid: boolean;
 };
 
 export type MutationResult = { ok: true } | { ok: false; reason: string; message: string };
@@ -295,6 +298,7 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
       monthSpentPence: 0,
       spendCount: 0,
       checkIn: null,
+      paid: false,
     };
   }
   try {
@@ -302,6 +306,9 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
     const profile = await loadProfile(user.id);
     const snapshots = await loadSnapshots(user.id);
     const totals = await loadSpendTotals(user.id);
+    // Whether the what-if sliders render as controls or as the calm paid panel.
+    // This is a display flag only — the sliders' server functions re-check it.
+    const paid = (await entitlementFor(user.id)).paid;
     // The check-in card's suggestion and its "before" estimate are both worked out
     // here, on the server, from the user's own stored rows.
     const checkIn = profile
@@ -319,6 +326,7 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
       monthSpentPence: totals.monthSpentPence,
       spendCount: totals.spendCount,
       checkIn,
+      paid,
     };
   } catch {
     return {
@@ -330,6 +338,7 @@ export const dashboardFn = createServerFn().handler(async (): Promise<DashboardD
       monthSpentPence: 0,
       spendCount: 0,
       checkIn: null,
+      paid: false,
     };
   }
 });

@@ -18,6 +18,7 @@ import {
   type ScenarioNumbers,
 } from "~/lib/scenario";
 import { getSessionUser } from "./auth";
+import { PAID_REQUIRED_MESSAGE, isPaidUser } from "./entitlement";
 
 /**
  * Family Mode — Personal FI beside Family FI, worked out entirely here.
@@ -218,6 +219,11 @@ export const familyPageFn = createServerFn().handler(async (): Promise<FamilyPag
   if (!user) {
     return { ok: false, reason: "signed-out", message: "Please log in again." };
   }
+  // THE GATE, server-side. A free account gets this refusal even if it calls the
+  // function directly — the panel in the UI is only the visible half of the rule.
+  if (!(await isPaidUser(user.id))) {
+    return { ok: false, reason: "paid-required", message: PAID_REQUIRED_MESSAGE };
+  }
   try {
     await ensureSchema();
     const numbers = await priceFamily(user.id);
@@ -250,6 +256,10 @@ export const saveFamilyFn = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<FamilyPageData> => {
     const user = await getSessionUser();
     if (!user) return { ok: false, reason: "signed-out", message: "Please log in again." };
+    // Nothing about a household is written for a free account.
+    if (!(await isPaidUser(user.id))) {
+      return { ok: false, reason: "paid-required", message: PAID_REQUIRED_MESSAGE };
+    }
     const household = validateHousehold(data);
     try {
       await ensureSchema();

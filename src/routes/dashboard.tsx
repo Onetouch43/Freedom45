@@ -7,6 +7,7 @@ import { Header } from "~/components/Header";
 import { PathChart } from "~/components/PathChart";
 import { WeeklyCheckIn } from "~/components/WeeklyCheckIn";
 import { WhatIf } from "~/components/WhatIf";
+import { PaidPanel } from "~/components/PaidPanel";
 import { Button, Card, Disclaimer, ErrorNote, Label } from "~/components/ui";
 import {
   IconArrowRight,
@@ -292,14 +293,24 @@ function Dashboard() {
         </Card>
 
         {/* ------------------------------------------------- what-if sliders */}
-        <WhatIf
-          currency={currency}
-          annualReturnPct={rate}
-          maxCutPence={Math.round(spending * 100)}
-          onKept={async () => {
-            await router.invalidate();
-          }}
-        />
+        {/* FREE ACCOUNT: one calm panel instead of the sliders. The sliders' own
+            server functions refuse a free account too, so this is the visible half. */}
+        {data?.paid ? (
+          <WhatIf
+            currency={currency}
+            annualReturnPct={rate}
+            maxCutPence={Math.round(spending * 100)}
+            onKept={async () => {
+              await router.invalidate();
+            }}
+          />
+        ) : (
+          <PaidPanel
+            feature="what-if"
+            title="The what-if sliders are part of the paid plan"
+            intro="Move your income, your spending and a side-hustle figure and watch both dates move — then keep the version you like. The sliders are built and waiting; they open as soon as the paid plan is on your account."
+          />
+        )}
 
         {/* ---------------------------------------------------- your numbers */}
         <div ref={numbersRef} className="scroll-mt-3">

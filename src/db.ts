@@ -233,6 +233,13 @@ export const DDL: string[] = [
   `alter table profiles add column if not exists children_count integer not null default 0`,
   `alter table profiles add column if not exists child_cost_monthly numeric(12,2) not null default 0`,
 
+  // Entitlement. `paid_until` in the future is the ONLY definition of a paid
+  // account; `stripe_customer_id` remembers the Stripe customer so a later
+  // restore can find the subscription. Both live on `profiles`, which is deleted
+  // with the user row — no new table, so one-tap delete already covers them.
+  `alter table profiles add column if not exists paid_until timestamptz`,
+  `alter table profiles add column if not exists stripe_customer_id text`,
+
   `create table if not exists sessions (
      token text primary key,
      user_id integer not null references users(id) on delete cascade,

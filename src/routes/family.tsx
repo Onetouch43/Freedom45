@@ -14,6 +14,7 @@ import {
   IconUser,
 } from "~/components/icons";
 import { Button, Card, Disclaimer, ErrorNote, Label } from "~/components/ui";
+import { PaidPanel } from "~/components/PaidPanel";
 import { age as fmtAge, moneyPence } from "~/lib/format";
 import { sessionUserFn } from "~/server/actions";
 import { familyPageFn, saveFamilyFn } from "~/server/family";
@@ -40,6 +41,9 @@ export const Route = createFileRoute("/family")({
     if (!data.ok) {
       if (data.reason === "signed-out") throw redirect({ to: "/login" });
       if (data.reason === "no-profile") throw redirect({ to: "/onboarding" });
+      // A free account sees the page and the calm panel — not an error, and not a
+      // redirect. The household form is never rendered for it.
+      if (data.reason === "paid-required") return data;
       return null;
     }
     if (!data.onboarded) throw redirect({ to: "/onboarding" });
@@ -73,8 +77,8 @@ function FamilyPage() {
   const data = Route.useLoaderData();
   const save = useServerFn(saveFamilyFn);
 
-  const currency = data?.currency ?? "GBP";
-  const household = data?.household;
+  const currency = (data?.ok ? data.currency : null) ?? "GBP";
+  const household = data?.ok ? data.household : undefined;
   const [draft, setDraft] = useState<Draft>({
     partnerIncluded: household?.partnerIncluded ?? false,
     partnerIncome: toPounds(household?.partnerIncomePence ?? 0),
@@ -102,6 +106,31 @@ function FamilyPage() {
           </Card>
         </main>
         <Footer signedIn={true} />
+      </div>
+    );
+  }
+
+  // FREE ACCOUNT: the page and what it does, with one calm panel instead of the
+  // household form. The server refuses the data as well — this is the visible half.
+  if (!data.ok) {
+    return (
+      <div className="min-h-dvh bg-page">
+        <Header signedIn />
+        <main className="mx-auto max-w-2xl space-y-3.5 px-4 py-5 pb-24 sm:space-y-4 sm:py-6">
+          <div>
+            <h1 className="text-2xl font-black tracking-tight text-body">Family Mode</h1>
+            <p className="mt-1 text-sm text-muted">
+              Your own numbers, and the same numbers with your household in them — side by side.
+            </p>
+          </div>
+          <PaidPanel
+            feature="family"
+            title="Family Mode is part of the paid plan"
+            intro="Family Mode shows your Personal FI beside a Family FI that counts a partner and children, and tells you plainly how many years apart the two dates are. It is built and waiting — it opens as soon as the paid plan is on your account."
+          />
+          <Disclaimer />
+        </main>
+        <Footer signedIn />
       </div>
     );
   }
