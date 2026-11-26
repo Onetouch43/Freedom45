@@ -93,14 +93,18 @@ function Login() {
         <Card className="mt-4" as="div">
           <h2 className="text-sm font-semibold text-body">Forgot your password?</h2>
           <p className="mt-1.5 text-sm leading-relaxed text-muted">
-            There&rsquo;s no automatic reset yet — email{" "}
+            <Link to="/forgot-password" className="font-semibold text-accent">
+              Reset it here
+            </Link>{" "}
+            — we&rsquo;ll email you a link that works once and expires in 30 minutes. If email
+            can&rsquo;t reach you yet, write to{" "}
             <a
               href="mailto:info@futuresaiglobal.com?subject=Password%20reset%20request"
               className="font-semibold text-accent underline decoration-accent/40 underline-offset-2 break-words"
             >
               info@futuresaiglobal.com
             </a>{" "}
-            from the address on your account and we&rsquo;ll reset it for you.
+            from the address on your account.
           </p>
         </Card>
 

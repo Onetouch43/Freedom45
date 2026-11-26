@@ -3,8 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { Footer, LEGAL_LINKS } from "~/components/Footer";
 import { Header } from "~/components/Header";
-import { Button, Card, Disclaimer, ErrorNote } from "~/components/ui";
+import { Button, Card, Disclaimer, ErrorNote, Label } from "~/components/ui";
 import { deleteAccountFn, logoutFn, sessionUserFn } from "~/server/actions";
+import { changePasswordFn } from "~/server/password-reset";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({ meta: [{ title: "Settings — Freedom45" }] }),
@@ -33,9 +34,40 @@ function Settings() {
   const { signedIn, email } = Route.useRouteContext();
   const logout = useServerFn(logoutFn);
   const deleteAccount = useServerFn(deleteAccountFn);
+  const changePassword = useServerFn(changePasswordFn);
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSaved, setPasswordSaved] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+
+  async function submitPassword(event: React.FormEvent) {
+    event.preventDefault();
+    setSavingPassword(true);
+    setPasswordError("");
+    setPasswordSaved(false);
+    try {
+      const result = await changePassword({
+        data: { currentPassword, newPassword, confirm: confirmPassword },
+      });
+      if (result.ok) {
+        setPasswordSaved(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        setPasswordError(result.message);
+      }
+    } catch {
+      setPasswordError("Couldn't reach the server. Please try again.");
+    } finally {
+      setSavingPassword(false);
+    }
+  }
 
   async function signOut() {
     setBusy(true);
@@ -109,6 +141,68 @@ function Settings() {
           <Button type="button" variant="light" onClick={() => void signOut()} className="mt-3 w-full" disabled={busy}>
             {busy ? "…" : "Log out"}
           </Button>
+        </Card>
+
+        <Card>
+          <h2 className="text-base font-semibold text-body">Change password</h2>
+          <p className="mt-1 text-sm text-muted">
+            If you know your current password, change it here — no email needed. Forgotten it? Use{" "}
+            <Link to="/forgot-password" className="font-semibold text-accent">
+              reset your password
+            </Link>
+            .
+          </p>
+          <form onSubmit={submitPassword} className="mt-3 space-y-3">
+            <div>
+              <Label htmlFor="current-password">Current password</Label>
+              <input
+                id="current-password"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+              />
+            </div>
+            <div>
+              <Label htmlFor="new-password">New password</Label>
+              <input
+                id="new-password"
+                type="password"
+                required
+                minLength={8}
+                autoComplete="new-password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                placeholder="at least 8 characters"
+              />
+            </div>
+            <div>
+              <Label htmlFor="confirm-password">Confirm new password</Label>
+              <input
+                id="confirm-password"
+                type="password"
+                required
+                minLength={8}
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full rounded-xl border border-line-strong bg-surface px-3 py-3 text-base text-body outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+                placeholder="type it again"
+              />
+            </div>
+            {passwordSaved ? (
+              <p role="status" className="rounded-xl border border-accent/40 bg-accent/10 p-3 text-sm text-accent">
+                Password changed. Use it next time you log in.
+              </p>
+            ) : null}
+            <ErrorNote>{passwordError}</ErrorNote>
+            <Button type="submit" variant="light" disabled={savingPassword} className="w-full">
+              {savingPassword ? "Saving…" : "Change password"}
+            </Button>
+          </form>
         </Card>
 
         <Card className="border-danger/35">
